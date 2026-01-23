@@ -1,37 +1,83 @@
-/************************* DEBUG SETTINGS *************************/
+:root {
+    --bg: #ffffff;
+    --text: #000000;
+    --primary: #d32f2f;
+    --secondary: #2e7d32;
+    --gray: #cccccc;
+}
 
-/* Settings to help find errors in your css
-   uncomment temporarily to enable */
+body.dark {
+    --bg: #121212;
+    --text: #ffffff;
+}
 
-/* Add dotted line around all boxes.
-   This makes size of boxes visible.
-   Warning 1: this settings may change your layout.
-   Warning 2: keep the * as selector for all tags when uncommenting. */
-/*  * {border: 1px dotted black;}   */
-  
-/* Add semi-transparant dark background to all boxes
-   The more boxes are on top of eachother the darker tghe background color
-   Warning: keep the * as selector for all tags when uncommenting. */
-/*  * {background-color: rgba(0,0,0,5%);}  */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+}
 
-/************************* BASE SETTINGS *************************/
+header {
+    background-color: var(--primary);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
 
-/* Settings to make it easier for you
-   uncomment permanently when you understand the meaning of them */
-   
-/* border is included in width en height of boxes */
-/* * { box-sizing: border-box; } */
+.container {
+    padding: 1rem;
+}
 
-/* standard margin 0 pixels */
-/* * { margin: 0px; } */
+button {
+    width: 100%;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
 
-/* hide everything larger than the dimensions of the div-box
-   important side effect: browser usually doesn't take floats
-   into account when determining height of div, leading to 
-   div with height zero. With this settings, height of div-boxes
-   willl be large enough to fit floats inside. */
-/* div { overflow: hidden; }
+.btn-emergency {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
 
-/************************* YOUR SETTINGS *************************/
+.btn-green {
+    background-color: var(--secondary);
+    color: white;
+}
 
-/* add your css here, feel free to use comments and order them logically for better readability */
+.btn-gray {
+    background-color: var(--gray);
+}
+
+.step {
+    border-left: 4px solid var(--primary);
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.location {
+    background: #f1f1f1;
+    padding: 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+body.dark .location {
+    background: #1e1e1e;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 2rem;
+}
