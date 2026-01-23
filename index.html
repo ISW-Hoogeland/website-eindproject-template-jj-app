@@ -1,15 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>Mijn Website</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <title>Noodhulp App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS koppeling -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  Mijn favoriete kleur is ...
-</body>
 
+<header>
+    <h1>Noodhulp Assistent</h1>
+    <p>Blijf rustig — volg de stappen</p>
+</header>
+
+<div class="container">
+
+    <!-- 112 knop -->
+    <a href="tel:112">
+        <button class="btn-emergency">📞 BEL 112</button>
+    </a>
+
+    <!-- Locatie -->
+    <div class="location">
+        <strong>📍 Jouw locatie</strong><br>
+        <span id="locationText">Locatie wordt opgehaald…</span>
+    </div>
+
+    <!-- Stappenplan -->
+    <div class="step">
+        <h3>Stap 1: Beoordeel de situatie</h3>
+        <p>Is de omgeving veilig voor jou en het slachtoffer?</p>
+    </div>
+
+    <div class="step">
+        <h3>Stap 2: Kies wat je nodig hebt</h3>
+        <button class="btn-green" onclick="showMedical()">❤️ Medische hulp</button>
+        <button class="btn-gray" onclick="showSupport()">🚧 Ondersteuning bij ongeval</button>
+    </div>
+
+    <!-- Medische hulp -->
+    <div id="medical" class="hidden">
+        <h3>Medische hulp</h3>
+        <p>Heeft het slachtoffer ademhaling?</p>
+        <button class="btn-green">Ja</button>
+        <button class="btn-emergency">Nee</button>
+        <p>Blijf bij het slachtoffer tot de hulpdiensten arriveren.</p>
+    </div>
+
+    <!-- Ondersteuning -->
+    <div id="support" class="hidden">
+        <h3>Ondersteuning</h3>
+        <ul>
+            <li>Houd omstanders op afstand</li>
+            <li>Regel verkeer indien veilig</li>
+            <li>Zorg voor zichtbaarheid</li>
+        </ul>
+    </div>
+
+    <!-- Extra functies -->
+    <button onclick="toggleFlashlight()">🔦 Zaklamp</button>
+    <button onclick="toggleDarkMode()">🌙 Dark mode</button>
+
+</div>
+
+<footer>
+    Deze app slaat geen persoonlijke gegevens op
+</footer>
+
+<script>
+    function showMedical() {
+        document.getElementById("medical").classList.remove("hidden");
+        document.getElementById("support").classList.add("hidden");
+    }
+
+    function showSupport() {
+        document.getElementById("support").classList.remove("hidden");
+        document.getElementById("medical").classList.add("hidden");
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle("dark");
+    }
+
+    function toggleFlashlight() {
+        alert("Zaklamp-functie wordt later via de camera API toegevoegd.");
+    }
+
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            () => {
+                document.getElementById("locationText").innerText =
+                    "GPS-locatie beschikbaar (adres via GPS)";
+            },
+            () => {
+                document.getElementById("locationText").innerText =
+                    "Locatie niet beschikbaar";
+            }
+        );
+    }
+</script>
+
+</body>
 </html>
