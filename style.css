@@ -1,14 +1,19 @@
 :root {
     --bg: #ffffff;
     --text: #000000;
-    --primary: #d32f2f;
-    --secondary: #2e7d32;
-    --gray: #cccccc;
+    --primary-red: #d32f2f;
+    --primary-green: #2e7d32;
+    --gray-bg: #f4f4f4;
+    --nav-bg: #ffffff;
+    --border: #dddddd;
 }
 
 body.dark {
-    --bg: #121212;
+    --bg: #000000;
     --text: #ffffff;
+    --gray-bg: #1a1a1a;
+    --nav-bg: #121212;
+    --border: #333333;
 }
 
 body {
@@ -16,68 +21,102 @@ body {
     font-family: Arial, sans-serif;
     background-color: var(--bg);
     color: var(--text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-bottom: 150px; /* Ruimte voor actiebalk + menu */
 }
 
+/* --- BOVENBALK (Header) --- */
 header {
-    background-color: var(--primary);
-    color: white;
-    padding: 1rem;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    align-items: center;
 }
 
-.container {
-    padding: 1rem;
-}
-
-button {
-    width: 100%;
-    padding: 1rem;
-    margin: 0.5rem 0;
-    font-size: 1.1rem;
+.btn-top {
+    padding: 8px 20px;
+    border-radius: 4px;
     border: none;
-    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+.btn-trainen { background-color: var(--primary-green); }
+.btn-112 { background-color: var(--primary-red); }
+
+/* --- MIDDEN (Knoppen) --- */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.btn-large {
+    width: 80%;
+    max-width: 300px;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-slachtoffer { background-color: #388e3c; color: white; }
+.btn-coordineren { background-color: #d32f2f; color: white; }
+
+/* --- ACTIEBALK ONDERIN (Boven de menu balk) --- */
+.action-bar {
+    position: fixed;
+    bottom: 70px; /* Precies boven het menu */
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 0;
+    background-color: var(--bg);
+}
+
+.location-box { text-align: center; font-size: 0.8rem; }
+.location-box i { font-size: 1.5rem; display: block; margin-bottom: 5px; }
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
     cursor: pointer;
 }
 
-.btn-emergency {
-    background-color: red;
-    color: white;
-    font-weight: bold;
+/* --- NAVIGATIE MENU --- */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background-color: var(--nav-bg);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
-.btn-green {
-    background-color: var(--secondary);
-    color: white;
-}
-
-.btn-gray {
-    background-color: var(--gray);
-}
-
-.step {
-    border-left: 4px solid var(--primary);
-    padding-left: 1rem;
-    margin-bottom: 1rem;
-}
-
-.location {
-    background: #f1f1f1;
-    padding: 0.8rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-}
-
-body.dark .location {
-    background: #1e1e1e;
-}
-
-.hidden {
-    display: none;
-}
-
-footer {
+.nav-item {
     text-align: center;
-    font-size: 0.8rem;
-    opacity: 0.7;
-    margin-top: 2rem;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.7rem;
 }
+
+.nav-item i { display: block; font-size: 1.2rem; }
+.active { color: var(--primary-red); font-weight: bold; }
