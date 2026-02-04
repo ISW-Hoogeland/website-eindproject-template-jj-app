@@ -1,3 +1,4 @@
+/* --- VARIABELEN --- */
 :root {
     --bg: #ffffff;
     --text: #000000;
@@ -6,14 +7,23 @@
     --gray-bg: #f4f4f4;
     --nav-bg: #ffffff;
     --border: #dddddd;
+    --correct-bg: #d4edda;
+    --correct-text: #155724;
+    --incorrect-bg: #f8d7da;
+    --incorrect-text: #721c24;
 }
 
+/* --- DARK MODE --- */
 body.dark {
     --bg: #000000;
     --text: #ffffff;
     --gray-bg: #1a1a1a;
     --nav-bg: #121212;
     --border: #333333;
+    --correct-bg: #1b4332;
+    --correct-text: #d4edda;
+    --incorrect-bg: #4c1d1f;
+    --incorrect-text: #f8d7da;
 }
 
 body {
@@ -24,10 +34,10 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-bottom: 150px; /* Ruimte voor actiebalk + menu */
+    padding-bottom: 160px; /* Ruimte voor actiebalk en menu */
 }
 
-/* --- BOVENBALK (Header) --- */
+/* --- HEADER --- */
 header {
     display: flex;
     justify-content: space-between;
@@ -47,48 +57,85 @@ header {
 .btn-trainen { background-color: var(--primary-green); }
 .btn-112 { background-color: var(--primary-red); }
 
-/* --- MIDDEN (Knoppen) --- */
+/* --- QUIZ LAYOUT --- */
 .main-content {
     flex-grow: 1;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 90%;
+}
+
+.progress-bar {
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    opacity: 0.7;
+    text-align: center;
+}
+
+.question-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.options-grid {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
+    gap: 10px;
 }
 
-.btn-large {
-    width: 80%;
-    max-width: 300px;
+.option-btn {
     padding: 15px;
-    border-radius: 12px;
-    border: none;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: black;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: var(--gray-bg);
+    color: var(--text);
     cursor: pointer;
-    text-align: center;
-    text-decoration: none;
+    font-size: 1rem;
+    text-align: left;
+    transition: 0.2s;
 }
 
-.btn-slachtoffer { background-color: #388e3c; color: white; }
-.btn-coordineren { background-color: #d32f2f; color: white; }
+.feedback-box {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    display: none;
+    line-height: 1.4;
+}
 
-/* --- ACTIEBALK ONDERIN (Boven de menu balk) --- */
+.feedback-box.correct { background-color: var(--correct-bg); color: var(--correct-text); }
+.feedback-box.incorrect { background-color: var(--incorrect-bg); color: var(--incorrect-text); }
+
+.next-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    display: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* --- ACTIEBALK & NAV --- */
 .action-bar {
     position: fixed;
-    bottom: 70px; /* Precies boven het menu */
+    bottom: 70px;
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 15px 0;
     background-color: var(--bg);
+    border-top: 1px solid var(--border);
 }
 
 .location-box { text-align: center; font-size: 0.8rem; }
-.location-box i { font-size: 1.5rem; display: block; margin-bottom: 5px; }
 
 .icon-btn {
     background: none;
@@ -98,7 +145,6 @@ header {
     cursor: pointer;
 }
 
-/* --- NAVIGATIE MENU --- */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -118,5 +164,4 @@ header {
     font-size: 0.7rem;
 }
 
-.nav-item i { display: block; font-size: 1.2rem; }
-.active { color: var(--primary-red); font-weight: bold; }
+.nav-item.active { color: var(--primary-red); font-weight: bold; }
