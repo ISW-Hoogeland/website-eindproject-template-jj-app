@@ -54,10 +54,10 @@ h1 {
 .progress-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(90deg, #ea6666 0%, #a24b4b 100%);
     border-radius: 10px;
     transition: width 0.3s ease;
-    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+    box-shadow: 0 0 10px rgba(226, 98, 98, 0.5);
 }
 
 .loading-text {
