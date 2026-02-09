@@ -8,36 +8,59 @@
 </head>
 <body>
 
-<header>
+<header class="top-header">
     <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
-    <a href="tel:112" class="btn-top btn-112">📞 - 112</a>
+    <a href="tel:112" class="btn-emergency">📞 112 bellen</a>
 </header>
 
 <main class="main-content">
-    <a href="slachtoffer.html" class="btn-large btn-slachtoffer">slachtofferhulp</a>
-    <a href="coordinatie.html" class="btn-large btn-coordineren">coördineren hulp</a>
+    <section class="hero-actions">
+        <a href="slachtoffer.html" class="card card-victim">
+            <span class="card-icon">🩹</span>
+            <div class="card-text">
+                <h2>Slachtofferhulp</h2>
+                <p>Eerste hulp verlenen</p>
+            </div>
+        </a>
+        <a href="coordinatie.html" class="card card-coord">
+            <span class="card-icon">📣</span>
+            <div class="card-text">
+                <h2>Coördineren</h2>
+                <p>Leid de hulpverlening</p>
+            </div>
+        </a>
+    </section>
+
+    <div class="status-bar">
+        <div class="location-info">
+            <span class="icon">📍</span>
+            <div>
+                <small>Uw huidige locatie</small>
+                <p><strong>Professorslaan 20, Eindhoven</strong></p>
+            </div>
+        </div>
+        <div class="quick-actions">
+            <button class="action-circle" onclick="toggleFlashlight()" title="Zaklamp">🔦</button>
+            <button class="action-circle" onclick="toggleDarkMode()" title="Thema">🌓</button>
+            <button class="action-circle" onclick="alert('App Info')" title="Info">ℹ️</button>
+        </div>
+    </div>
 </main>
 
-<div class="action-bar">
-    <button class="icon-btn" onclick="alert('Info over de app')">ⓘ</button>
-    <div class="location-box">
-        <i>📍</i>
-        Uw locatie<br><strong>Professorslaan 20</strong>
-    </div>
-    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
-    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
-</div>
-
 <nav class="bottom-nav">
-    <a href="index.html" class="nav-item active"><i>🏠</i>Home</a>
-    <a href="slachtoffer.html" class="nav-item"><i>🩹</i>Slachtoffer</a>
-    <a href="coordinatie.html" class="nav-item"><i>📣</i>Coördinatie</a>
-    <a href="quiz.html" class="nav-item"><i>❓</i>Quiz</a>
+    <a href="index.html" class="nav-item active"><span>🏠</span>Home</a>
+    <a href="ehbo-gids.html" class="nav-item"><span>📖</span>EHBO Gids</a>
+    <a href="kaart.html" class="nav-item"><span>🗺️</span>AED Kaart</a>
+    <a href="medisch-id.html" class="nav-item"><span>🆔</span>ID</a>
 </nav>
 
 <script>
-    function toggleDarkMode() { document.body.classList.toggle("dark"); }
-    function toggleFlashlight() { alert("Zaklamp aan!"); }
+    function toggleDarkMode() { 
+        document.body.classList.toggle("dark-mode"); 
+    }
+    function toggleFlashlight() { 
+        alert("Zaklamp functionaliteit geactiveerd!"); 
+    }
 </script>
 </body>
 </html>

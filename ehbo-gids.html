@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>EHBO Gids - Noodhulp App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="guide-page">
+
+<header class="top-header">
+    <a href="index.html" class="btn-back">⬅ Terug</a>
+    <h1 class="header-title">EHBO Gids</h1>
+</header>
+
+<main class="main-content">
+    <div class="search-container">
+        <input type="text" placeholder="Wat is er aan de hand? (bijv. 'brandwond')" class="search-bar">
+    </div>
+
+    <section class="guide-grid">
+        <div class="guide-card urgent" onclick="toggleDetails('cpr')">
+            <div class="card-header">
+                <span class="guide-icon">🫀</span>
+                <h3>Reanimatie & AED</h3>
+            </div>
+            <div id="cpr" class="guide-details">
+                <p><strong>1. Controleer bewustzijn:</strong> Schud aan schouders, roep luid.</p>
+                <p><strong>2. Ademhaling:</strong> Kijk, luister, voel (max 10 sec).</p>
+                <p><strong>3. Bel 112:</strong> Zet de telefoon op de luidspreker.</p>
+                
+                <p><strong>4. Borstcompressies:</strong> 30 keer in hoog tempo (100-120 bpm).</p>
+                <p><strong>5. Beademing:</strong> 2 keer kort blazen (indien getraind).</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('choking')">
+            <div class="card-header">
+                <span class="guide-icon">🥨</span>
+                <h3>Verslikking</h3>
+            </div>
+            <div id="choking" class="guide-details">
+                <p><strong>1. Moedig aan tot hoesten.</strong></p>
+                <p><strong>2. 5 slagen tussen schouderbladen:</strong> Sla met de hiel van je hand.</p>
+                
+
+[Image of the Heimlich maneuver steps]
+
+                <p><strong>3. Heimlich greep:</strong> 5 keer krachtig trekken boven de navel.</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('unconscious')">
+            <div class="card-header">
+                <span class="guide-icon">😴</span>
+                <h3>Bewusteloosheid</h3>
+            </div>
+            <div id="unconscious" class="guide-details">
+                <p>Ademt het slachtoffer nog wel? Leg deze in de <strong>Stabiele Zijligging</strong>.</p>
+                
+
+[Image of the recovery position]
+
+                <p>Controleer elke minuut de ademhaling tot de ambulance er is.</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('burns')">
+            <div class="card-header">
+                <span class="guide-icon">🔥</span>
+                <h3>Brandwonden</h3>
+            </div>
+            <div id="burns" class="guide-details">
+                <p><strong>Eerst water, de rest komt later.</strong></p>
+                <p>Minimaal 10-20 minuten koelen met lauw, zacht stromend kraanwater.</p>
+                <p>Verwijder kleding alleen als deze niet aan de wond kleeft.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item"><span>🏠</span>Home</a>
+    <a href="ehbo-gids.html" class="nav-item active"><span>📖</span>EHBO Gids</a>
+    <a href="kaart.html" class="nav-item"><span>🗺️</span>AED Kaart</a>
+    <a href="medisch-id.html" class="nav-item"><span>🆔</span>ID</a>
+</nav>
+
+<script>
+    function toggleDetails(id) {
+        const detail = document.getElementById(id);
+        const allDetails = document.querySelectorAll('.guide-details');
+        
+        // Sluit andere geopende items (optioneel, voor focus)
+        allDetails.forEach(item => {
+            if(item.id !== id) item.style.display = 'none';
+        });
+
+        // Toggle de geselecteerde
+        if (detail.style.display === "block") {
+            detail.style.display = "none";
+        } else {
+            detail.style.display = "block";
+        }
+    }
+</script>
+</body>
+</html>
