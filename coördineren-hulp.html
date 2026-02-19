@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Coördineren Hulp - Noodhulp App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <a href="tel:112" class="btn-top btn-112">📞 - 112</a>
+</header>
+
+<main class="main-content coordinatie-page">
+    <h2>Stappenplan Coördineren & Omgeven</h2>
+    
+    <div class="step-container" id="stepContainer">
+        <!-- Stappen worden ingevuld door JavaScript -->
+    </div>
+    
+    <div class="step-buttons">
+        <button onclick="previousStep()" class="step-btn" id="prevBtn">← Vorige</button>
+        <button onclick="nextStep()" class="step-btn" id="nextBtn">Check →</button>
+    </div>
+</main>
+
+<div class="action-bar">
+    <button class="icon-btn" onclick="alert('Info over de app')">ⓘ</button>
+    <div class="location-box">
+        <i>📍</i>
+        Uw locatie<br><strong>Professorslaan 20</strong>
+    </div>
+    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
+    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
+</div>
+
+<nav class="bottom-nav">
+    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <a href="index.html" class="nav-item"><i>🏠</i>Home</a>
+    <a href="slachtoffer.html" class="nav-item"><i>🩹</i>Slachtoffer</a>
+    <a href="coördineren-hulp.html" class="nav-item active"><i>📣</i>Coördinatie</a>
+    <a href="tel:112" class="btn-top btn-112">📞 112</a>
+</nav>
+
+<script>
+    let currentStep = 1;
+    const totalSteps = 7;
+    
+    const steps = [
+        {
+            title: "Situatie waarderen en doorgeven",
+            description: "Beoordeel de plaats van het ongeval (zie locatie onderin) en aantal slachtoffers."
+        },
+
+        {
+            title: "Informatie doorgeven",
+            description: "Zorg dat hulpverleners alle informatie hebben."
+        },
+
+        {
+            title: "Afzetten",
+            description: "blokkeer de plek van ongeluk zodat je veilig hulp kunt verlenen."
+        },
+        {
+            title: "Verkeer reguleren",
+            description: "Houd verkeer op veilige afstand met handgebaren en probeer het door te laten stromen."
+        },
+        {
+            title: "Omstanders wegwijs",
+            description: "Stuur omstanders naar veilige plek, vraag hulp wanneer nodig."
+        },
+
+        {
+            title: "Controleer doorgang",
+            description: "Zorg dat wegen vrij blijven voor hulpdiensten."
+        },
+    
+        {
+            title: "Hulpverleners geleiden",
+            description: "Wijs ambulance/brandweer naar plek van ongeluk."
+        }
+        
+    ];
+    
+    function displayStep() {
+        const stepContainer = document.getElementById('stepContainer');
+        const step = steps[currentStep - 1];
+        
+        stepContainer.innerHTML = `
+            <div class="step-box">
+                <p class="step-number">STAP ${currentStep} VAN ${totalSteps}</p>
+                <h3 class="step-title">${step.title}</h3>
+                <p class="step-description">${step.description}</p>
+            </div>
+        `;
+        
+        // Update buttons visibility
+        const prevBtn = document.getElementById('prevBtn');
+        if (currentStep > 1) {
+            prevBtn.style.display = 'inline-block';
+        } else {
+            prevBtn.style.display = 'none';
+        }
+        document.getElementById('nextBtn').innerText = currentStep === totalSteps ? 'Klaar!' : 'Check →';
+    }
+    
+    function nextStep() {
+        if (currentStep < totalSteps) {
+            currentStep++;
+            displayStep();
+        } else if (currentStep === totalSteps) {
+            alert('Je hebt alle stappen voltooid!');
+        }
+    }
+    
+    function previousStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            displayStep();
+        }
+    }
+    
+    function toggleDarkMode() { document.body.classList.toggle("dark"); }
+    function toggleFlashlight() { alert("Zaklamp aan!"); }
+    
+    // Start displaying first step
+    displayStep();
+</script>
+</body>
+</html>

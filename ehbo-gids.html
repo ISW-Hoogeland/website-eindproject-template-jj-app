@@ -79,11 +79,22 @@
     </section>
 </main>
 
+<div class="action-bar">
+    <button class="icon-btn" onclick="alert('Info over de app')">ⓘ</button>
+    <div class="location-box">
+        <i>📍</i>
+        Uw locatie<br><strong>Professorslaan 20</strong>
+    </div>
+    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
+    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
+</div>
+
 <nav class="bottom-nav">
+    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
     <a href="index.html" class="nav-item"><span>🏠</span>Home</a>
     <a href="ehbo-gids.html" class="nav-item active"><span>📖</span>EHBO Gids</a>
     <a href="kaart.html" class="nav-item"><span>🗺️</span>AED Kaart</a>
-    <a href="medisch-id.html" class="nav-item"><span>🆔</span>ID</a>
+    <a href="tel:112" class="btn-top btn-112">📞 112</a>
 </nav>
 
 <script>
@@ -103,6 +114,9 @@
             detail.style.display = "block";
         }
     }
+
+    function toggleDarkMode() { document.body.classList.toggle("dark"); }
+    function toggleFlashlight() { alert("Zaklamp aan!"); }
 </script>
 </body>
 </html>
