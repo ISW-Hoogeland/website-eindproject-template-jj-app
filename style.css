@@ -34,12 +34,12 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-bottom: 160px; /* Ruimte voor actiebalk en menu */
+    padding-top: 160px; /* Ruimte voor navigatie en menu */
 }
 
 /* --- HEADER --- */
 header {
-    display: flex;
+    display: none;
     justify-content: space-between;
     padding: 15px;
     align-items: center;
@@ -125,7 +125,7 @@ header {
 /* --- ACTIEBALK & NAV --- */
 .action-bar {
     position: fixed;
-    bottom: 70px;
+    bottom: 0;
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -133,6 +133,7 @@ header {
     padding: 15px 0;
     background-color: var(--bg);
     border-top: 1px solid var(--border);
+    z-index: 99;
 }
 
 .location-box { text-align: center; font-size: 0.8rem; }
@@ -147,14 +148,15 @@ header {
 
 .bottom-nav {
     position: fixed;
-    bottom: 0;
+    top: 0;
     width: 100%;
     height: 70px;
     background-color: var(--nav-bg);
-    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     display: flex;
     justify-content: space-around;
     align-items: center;
+    z-index: 100;
 }
 
 .nav-item {
@@ -162,7 +164,27 @@ header {
     text-decoration: none;
     color: var(--text);
     font-size: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
 }
+
+.nav-item.active { color: var(--primary-red); font-weight: bold; }
+
+.btn-top {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    font-size: 0.7rem;
+    white-space: nowrap;
+}
+
+.btn-trainen { background-color: var(--primary-green); }
+.btn-112 { background-color: var(--primary-red); }
 
 .nav-item.active { color: var(--primary-red); font-weight: bold; }
 
@@ -190,7 +212,7 @@ body {
     background-color: var(--bg-color); 
     color: var(--text-color);
     transition: all 0.3s ease;
-    padding-bottom: 80px; /* Ruimte voor bottom nav */
+    padding-top: 80px; /* Ruimte voor top nav */
 }
 
 /* Header */
@@ -236,6 +258,7 @@ body {
 .card-icon { font-size: 2rem; margin-right: 20px; }
 .card-victim { border-left: 8px solid var(--primary-red); }
 .card-coord { border-left: 8px solid var(--primary-blue); }
+.card-quiz { border-left: 8px solid var(--primary-green); }
 
 /* Status Bar */
 .status-bar {
@@ -270,13 +293,14 @@ body {
 /* Bottom Nav */
 .bottom-nav {
     position: fixed;
-    bottom: 0;
+    top: 0;
     width: 100%;
     background: var(--card-bg);
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 100;
 }
 
 .nav-item {
@@ -343,4 +367,88 @@ body {
     width: 100%;
     border-radius: 8px;
     margin: 10px 0;
+}
+
+/* Coördinatie Pagina */
+.coordinatie-page,
+.victim-page {
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
+/* Stappenpanel Styling */
+.step-container {
+    margin-bottom: 20px;
+}
+
+.step-box {
+    background: var(--gray-bg);
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    border-left: 5px solid var(--primary-red);
+}
+
+.step-number {
+    color: var(--primary-red);
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+}
+
+.step-title {
+    margin: 10px 0;
+    font-size: 1.3rem;
+}
+
+.step-description {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.step-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.step-buttons #prevBtn {
+    display: none;
+}
+
+.step-btn {
+    padding: 12px 30px;
+    margin: 5px;
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.step-btn:hover {
+    background-color: var(--primary-red);
+}
+
+.step-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.step-btn-yes {
+    background-color: var(--primary-green);
+}
+
+.step-btn-yes:hover {
+    background-color: darkgreen;
+}
+
+.step-btn-no {
+    background-color: var(--primary-red);
+}
+
+.step-btn-no:hover {
+    background-color: darkred;
 }

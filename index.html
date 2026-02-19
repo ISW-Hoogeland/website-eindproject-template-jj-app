@@ -8,10 +8,28 @@
 </head>
 <body>
 
-<header class="top-header">
+<header>
     <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
-    <a href="tel:112" class="btn-emergency">📞 112 bellen</a>
+    <a href="tel:112" class="btn-top btn-112">📞 112</a>
 </header>
+
+<div class="action-bar">
+    <button class="icon-btn" onclick="alert('Info over de app')">ⓘ</button>
+    <div class="location-box">
+        <i>📍</i>
+        Uw locatie<br><strong>Professorslaan 20</strong>
+    </div>
+    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
+    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
+</div>
+
+<nav class="bottom-nav">
+    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <a href="index.html" class="nav-item active"><span>🏠</span>Home</a>
+    <a href="ehbo-gids.html" class="nav-item"><span>📖</span>EHBO Gids</a>
+    <a href="kaart.html" class="nav-item"><span>🗺️</span>AED Kaart</a>
+    <a href="tel:112" class="btn-top btn-112">📞 112</a>
+</nav>
 
 <main class="main-content">
     <section class="hero-actions">
@@ -22,11 +40,18 @@
                 <p>Eerste hulp verlenen</p>
             </div>
         </a>
-        <a href="coordinatie.html" class="card card-coord">
+        <a href="coördineren-hulp.html" class="card card-coord">
             <span class="card-icon">📣</span>
             <div class="card-text">
                 <h2>Coördineren</h2>
                 <p>Leid de hulpverlening</p>
+            </div>
+        </a>
+        <a href="quiz.html" class="card card-quiz">
+            <span class="card-icon">❓</span>
+            <div class="card-text">
+                <h2>Trainen</h2>
+                <p>Test je kennis</p>
             </div>
         </a>
     </section>
@@ -46,13 +71,6 @@
         </div>
     </div>
 </main>
-
-<nav class="bottom-nav">
-    <a href="index.html" class="nav-item active"><span>🏠</span>Home</a>
-    <a href="ehbo-gids.html" class="nav-item"><span>📖</span>EHBO Gids</a>
-    <a href="kaart.html" class="nav-item"><span>🗺️</span>AED Kaart</a>
-    <a href="medisch-id.html" class="nav-item"><span>🆔</span>ID</a>
-</nav>
 
 <script>
     function toggleDarkMode() { 
