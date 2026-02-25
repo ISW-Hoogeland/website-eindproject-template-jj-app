@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Noodhulp App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <a href="tel:112" class="btn-top btn-112">📞 112</a>
+</header>
+
+<div class="action-bar">
+    <button class="icon-btn" onclick="alert('Info over de app')">ⓘ</button>
+    
+    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
+    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
+</div>
+
+<nav class="bottom-nav">
+    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <a href="index.html" class="nav-item active"><span>🏠</span>Home</a>
+    <a href="ehbo-gids.html" class="nav-item"><span>📖</span>EHBO Gids</a>
+    <a href="kaart.html" class="nav-item"><span>🗺️</span>AED Kaart</a>
+    <a href="#" class="nav-item live-location" id="live-location">
+        <span>📍</span>
+        <div class="location-lines">
+            <small class="location-title">Uw locatie</small>
+            <small id="live-location-text">Locatie ophalen…</small>
+        </div>
+    </a>
+    <a href="tel:112" class="btn-top btn-112">📞 112</a>
+</nav>
+
+<main class="main-content">
+    <section class="hero-actions">
+        <a href="slachtoffer.html" class="card card-victim">
+            <span class="card-icon">🩹</span>
+            <div class="card-text">
+                <h2>Slachtofferhulp</h2>
+                <p>Eerste hulp verlenen</p>
+            </div>
+        </a>
+        <a href="coördineren-hulp.html" class="card card-coord">
+            <span class="card-icon">📣</span>
+            <div class="card-text">
+                <h2>Coördineren</h2>
+                <p>Leid de hulpverlening</p>
+            </div>
+        </a>
+        <a href="quiz.html" class="card card-quiz">
+            <span class="card-icon">❓</span>
+            <div class="card-text">
+                <h2>Trainen</h2>
+                <p>Test je kennis</p>
+            </div>
+        </a>
+    </section>
+
+    <div class="status-bar">
+        <div class="location-info">
+            <span class="icon">📍</span>
+            <div>
+                <small>Uw huidige locatie</small>
+                <p><strong>Professorslaan 20, Eindhoven</strong></p>
+            </div>
+        </div>
+        <div class="quick-actions">
+            <button class="action-circle" onclick="toggleFlashlight()" title="Zaklamp">🔦</button>
+            <button class="action-circle" onclick="toggleDarkMode()" title="Thema">🌓</button>
+            <button class="action-circle" onclick="alert('App Info')" title="Info">ℹ️</button>
+        </div>
+    </div>
+</main>
+
+<script>
+    function toggleDarkMode() { 
+        document.body.classList.toggle("dark-mode"); 
+    }
+    function toggleFlashlight() { 
+        alert("Zaklamp functionaliteit geactiveerd!"); 
+    }
+
+    // Vraag locatie-permissie bij openen en toon live locatie (leesbaar adres) in de onderste navigatie
+    function initGeolocation() {
+        const el = document.getElementById('live-location-text');
+        if (!el) return;
+
+        if (!('geolocation' in navigator)) {
+            el.textContent = 'Locatie niet ondersteund';
+            return;
+        }
+
+        el.textContent = 'Vraagt toestemming...';
+
+        // throttle reverse-geocoding: minimaal 10s tussen requests
+        window._lastReverseTime = 0;
+
+        try {
+            const id = navigator.geolocation.watchPosition(async (pos) => {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                const short = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+
+                const statusEl = document.getElementById('status-location');
+
+                // als het langer dan 10s geleden is, vraag een leesbaar adres
+                const now = Date.now();
+                if (now - window._lastReverseTime > 10000) {
+                    window._lastReverseTime = now;
+                    try {
+                        const label = await reverseGeocode(lat, lon);
+                        const display = label || short;
+                        el.textContent = display;
+                        if (statusEl) statusEl.textContent = display;
+                    } catch (e) {
+                        el.textContent = short;
+                        if (statusEl) statusEl.textContent = short;
+                    }
+                } else {
+                    // toon kort-coördinaten totdat we reverse geocode doen
+                    el.textContent = short;
+                    if (statusEl) statusEl.textContent = short;
+                }
+            }, (err) => {
+                if (err.code === err.PERMISSION_DENIED) el.textContent = 'Locatie geweigerd';
+                else if (err.code === err.POSITION_UNAVAILABLE) el.textContent = 'Locatie niet beschikbaar';
+                else el.textContent = 'Fout bij locatie';
+            }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 });
+
+            window._geoWatchId = id;
+        } catch (e) {
+            el.textContent = 'Kan locatie niet ophalen';
+        }
+    }
+
+    // eenvoudige reverse-geocoding via Nominatim (OpenStreetMap)
+    async function reverseGeocode(lat, lon) {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&accept-language=nl`;
+        const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (!resp.ok) throw new Error('Geocode fout');
+        const data = await resp.json();
+        // voorkom te lange tekst in de navigatie
+        if (data && data.display_name) {
+            const name = data.display_name;
+            return name.length > 40 ? name.slice(0, 40) + '…' : name;
+        }
+        return null;
+    }
+
+    window.addEventListener('load', initGeolocation);
+</script>
+</body>
+</html>
