@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Noodhulp App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
+    <a href="tel:112" class="btn-top btn-112">📞 112</a>
+</nav>
+
+<main class="main-content victim-page">
+    <h2>Stappenplan: Patiënt in Leven Houden</h2>
+    
+    <div class="step-container" id="stepContainer">
+        <!-- Stappen worden ingevuld door JavaScript -->
+    </div>
+    
+    <div class="step-buttons">
+        <button onclick="previousStep()" class="step-btn" id="prevBtn">← Vorige</button>
+        <button onclick="nextStep()" class="step-btn" id="nextBtn">Check →</button>
+        <div id="breathingButtons" style="display: none;">
+            <button onclick="breathingResult(true)" class="step-btn step-btn-yes">Ja, ademt →</button>
+            <button onclick="breathingResult(false)" class="step-btn step-btn-no">Nee, ademt niet →</button>
+        </div>
+    </div>
+</main>
+
+<div class="action-bar">
+    <button class="icon-btn" onclick="alert('Info over de app')">ⓘ</button>
+    <div class="location-box">
+        <i>📍</i>
+        Uw locatie<br><strong>Professorslaan 20</strong>
+    </div>
+    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
+    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
+</div>
+
+<nav class="bottom-nav">
+    <a href="index.html" class="btn-top nav-item"><span>🏠</span>Home</a>
+    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
+    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
+    <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
+</nav>
+
+<script>
+    let currentStep = 1;
+    let atBreathingQuestion = false;
+    const totalSteps = 9;
+    
+    const steps = [
+        {
+            title: "Controleer je eigen veiligheid",
+            description: "Zorg dat je zelf veilig bent voordat je hulp biedt. Controleer omliggende gevaren."
+        },
+    
+        {
+            title: "Spreek het slachtoffer aan",
+            description: "Probeer reactiviteit vast te stellen. Spreek luid en aanwijzingen. Schouder aanraken."
+        },
+
+        {
+            title: "Bel 112 voor hulp",
+            description: "Bel onmiddellijk 112. Zet op luidspreker. Wacht op instructies van de alarmcentrale."
+        },
+
+        {
+            title: "Check de ademhaling",
+            description: "Kijk, luister en voel of het slachtoffer ademt. Dit mag niet langer dan 10 seconden zijn.",
+            isQuestion: true
+        },
+    
+        {
+            title: "Reanimatie Geven (CPR)",
+            description: "<strong>30 borstcompressies:</strong> Plaats je handen op het midden van de borst. Duw met volle kracht 5-6cm diep, 100-120 per minuut. <strong>2 beademingen:</strong> Blow 2 keer kort in (als getraind). Herhaal dit ritme totdat de ambulance er is.",
+            isReanimation: true
+        },
+        {
+            title: "Zet in stabiele zijligging",
+            description: "Als onbewust maar ademend: draai voorzichtig in de stabiele zijligging om verstikking te voorkomen."
+        },
+        {
+            title: "Monitor de patiënt",
+            description: "Blijf ademhaling controleren. Let op veranderingen. Zorg voor warmte en troost."
+        },
+        {
+            title: "Bloeding stoppen",
+            description: "Druk stevig op de wond met een schone doek of verband. Houd de druk vast en leg het gewonde lichaamsdeel indien mogelijk omhoog."
+        },
+
+        {
+            title: "Wacht op hulpdiensten",
+            description: "Blijf bij het slachtoffer tot hulpdiensten arriveren. Volg hun instructies op."
+        }
+    ];
+    
+    function displayStep() {
+        const stepContainer = document.getElementById('stepContainer');
+        const step = steps[currentStep - 1];
+        
+        stepContainer.innerHTML = `
+            <div class="step-box">
+                <p class="step-number">STAP ${currentStep}</p>
+                <h3 class="step-title">${step.title}</h3>
+                <p class="step-description">${step.description}</p>
+            </div>
+        `;
+        
+        updateButtonVisibility();
+    }
+    
+    function updateButtonVisibility() {
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const breathingButtons = document.getElementById('breathingButtons');
+        const step = steps[currentStep - 1];
+        
+        // Show/hide breathing question buttons
+        if (step.isQuestion) {
+            nextBtn.style.display = 'none';
+            breathingButtons.style.display = 'block';
+            prevBtn.style.display = 'inline-block';
+            atBreathingQuestion = true;
+        } else {
+            nextBtn.style.display = 'inline-block';
+            breathingButtons.style.display = 'none';
+            atBreathingQuestion = false;
+            nextBtn.innerText = currentStep === totalSteps ? 'Klaar!' : 'Check →';
+            if (currentStep > 1) {
+                prevBtn.style.display = 'inline-block';
+            } else {
+                prevBtn.style.display = 'none';
+            }
+        }
+    }
+    
+    function breathingResult(isBreathing) {
+        if (isBreathing) {
+            // Patient is breathing - skip reanimation, go to recovery position
+            currentStep = 6; // Zet in stabiele zijligging
+        } else {
+            // Patient is not breathing - go to reanimation
+            currentStep = 5; // Reanimatie geven
+        }
+        displayStep();
+    }
+    
+    function nextStep() {
+        if (currentStep < totalSteps) {
+            currentStep++;
+            displayStep();
+        } else if (currentStep === totalSteps) {
+            alert('Je hebt alle kritieke stappen voltooid. Zorg dat je bij het slachtoffer blijft!');
+        }
+    }
+    
+    function previousStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            displayStep();
+        }
+    }
+    
+    let flashlightStream = null;
+    let flashlightTrack = null;
+
+    function toggleDarkMode() { document.body.classList.toggle("dark"); }
+    async function toggleFlashlight() { 
+        try {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Zaklamp niet ondersteund op deze browser.');
+                return;
+            }
+
+            if (flashlightTrack) {
+                try {
+                    await flashlightTrack.applyConstraints({ advanced: [{ torch: false }] });
+                    flashlightTrack.stop();
+                    flashlightStream.getTracks().forEach(track => track.stop());
+                    flashlightTrack = null;
+                    flashlightStream = null;
+                } catch (e) {
+                    console.error('Error turning off flashlight:', e);
+                }
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        advanced: [{ torch: true }]
+                    }
+                });
+                flashlightStream = stream;
+                flashlightTrack = stream.getVideoTracks()[0];
+            } catch (e) {
+                console.log('Trying alternative method for flashlight...');
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                const track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+                if (capabilities.torch) {
+                    try {
+                        await track.applyConstraints({ advanced: [{ torch: true }] });
+                        flashlightStream = stream;
+                        flashlightTrack = track;
+                    } catch (constraintErr) {
+                        track.stop();
+                        stream.getTracks().forEach(t => t.stop());
+                        alert('Zaklamp kan niet worden ingeschakeld op dit apparaat.');
+                        return;
+                    }
+                } else {
+                    track.stop();
+                    stream.getTracks().forEach(t => t.stop());
+                    alert('Zaklamp niet beschikbaar op dit apparaat.');
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('Zaklamp fout:', error);
+            if (error.name === 'NotAllowedError') {
+                alert('Zaklamp toestemming geweigerd. Zet dit in je instellingen aan.');
+            } else if (error.name === 'NotFoundError') {
+                alert('Camera niet gevonden op dit apparaat.');
+            } else {
+                alert('Kan de zaklamp niet inschakelen. Mogelijke oorzaken: geen camera, geen toestemming, of onvoldoende Android versie (minimaal Android 5).');
+            }
+        }
+    }
+    
+    // Start displaying first step
+    displayStep();
+</script>
+</body>
+</html>

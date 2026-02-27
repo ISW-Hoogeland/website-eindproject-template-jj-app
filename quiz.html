@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz - Noodhulp App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
+    <a href="tel:112" class="btn-top btn-112">📞 112</a>
+</nav>
+
+<main class="main-content">
+    <div id="quiz-screen">
+        <div class="progress-bar">Vraag <span id="current-idx">1</span> van 20</div>
+        <div id="question" class="question-text">Laden...</div>
+        <div id="options" class="options-grid"></div>
+        <div id="feedback" class="feedback-box"></div>
+        <button id="next-button" class="next-btn" onclick="nextQuestion()">Volgende Vraag</button>
+    </div>
+
+    <div id="result-screen" style="display: none; text-align: center;">
+        <h2>Resultaat</h2>
+        <p style="font-size: 2rem; font-weight: bold;"><span id="final-score">0</span> / 20</p>
+        <p id="score-message"></p>
+        <button class="option-btn" style="text-align: center; width: 100%;" onclick="location.reload()">Opnieuw starten</button>
+    </div>
+</main>
+
+<div class="action-bar">
+    <button class="icon-btn" onclick="alert('EHBO Quiz v1.0')">ⓘ</button>
+    <div class="location-box">📍 Uw locatie<br><strong>Professorslaan 20</strong></div>
+    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
+    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
+</div>
+
+<nav class="bottom-nav">
+    <a href="index.html" class="btn-top nav-item"><span>🏠</span>Home</a>
+    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
+    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
+    <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
+</nav>
+
+<script>
+    // De 20 vragen database
+    const questions = [
+        { q: "Wat is de allereerste stap bij hulpverlening?", a: ["112 bellen", "Veiligheid controleren", "Slachtoffer aanspreken", "Reanimeren"], correct: 1, expl: "Veiligheid voor jezelf en anderen is de absolute basis voordat je iets anders doet." },
+        { q: "Wat is de verhouding reanimatie bij volwassenen?", a: ["15:2", "30:2", "30:5", "10:1"], correct: 1, expl: "30 borstcompressies en 2 beademingen is de standaard richtlijn." },
+        { q: "Wat doe je bij een ernstige bloeding?", a: ["Schoonmaken", "Druk uitoefenen", "Lichaamsdeel omlaag", "Pleister plakken"], correct: 1, expl: "Druk uitoefenen stopt het bloedverlies en voorkomt shock." },
+        { q: "Hoe behandel je een brandwond?", a: ["Boter erop", "Ijs erop", "Lauw stromend water", "Tandpasta"], correct: 2, expl: "Minstens 10-20 minuten koelen met lauw water is het beste." },
+        { q: "Waarvoor dient de stabiele zijligging?", a: ["Comfort", "Luchtweg vrijhouden", "Bloeddruk verhogen", "Tegen rugpijn"], correct: 1, expl: "Het voorkomt dat de tong de luchtweg blokkeert of dat iemand stikt in braaksel." },
+        { q: "Wat doe je bij verslikking als rugslagen niet werken?", a: ["Water geven", "Heimlich-greep", "Laten liggen", "Hard laten hoesten"], correct: 1, expl: "Buikstoten (Heimlich) verhogen de druk in de borstkas om het voorwerp uit te stoten." },
+        { q: "Wat is de eerste actie bij een AED?", a: ["Stickers plakken", "Aanzetten", "Borstkas scheren", "Schok geven"], correct: 1, expl: "Zodra de AED aanstaat, geeft deze gesproken instructies." },
+        { q: "Hoe herken je een beroerte (FAST)?", a: ["Honger", "Scheve mond/lamme arm", "Hoofdpijn", "Pijn in benen"], correct: 1, expl: "Face (mond), Arm (krachtverlies), Speech (spraak) en Time (tijd) zijn cruciaal." },
+        { q: "Wat doe je bij een bloedneus?", a: ["Hoofd achterover", "Licht voorover en neus dicht", "Watjes diep erin", "Plat gaan liggen"], correct: 1, expl: "De zogenaamde 'schrijfhouding' voorkomt dat bloed in de maag komt." },
+        { q: "Hoe diep moet je de borstkas indrukken?", a: ["2 cm", "5 tot 6 cm", "10 cm", "Niet te diep"], correct: 1, expl: "Dit is nodig om het bloed effectief rond te pompen bij een volwassene." },
+        { q: "Wat is het ritme van reanimatie?", a: ["60 bpm", "100-120 bpm", "150 bpm", "Elke seconde"], correct: 1, expl: "Denk aan het ritme van 'Stayin Alive'." },
+        { q: "Wanneer stop je met reanimatie?", a: ["Na 5 minuten", "Als de hulpdiensten het overnemen", "Als je moe bent", "Nooit"], correct: 1, expl: "Alleen als professionele hulp het overneemt of als het slachtoffer weer tekenen van leven vertoont." },
+        { q: "AED stickers op een kind?", a: ["Altijd volwassen stickers", "Kinderelektroden indien beschikbaar", "Niet gebruiken", "Op de benen"], correct: 1, expl: "Kinderelektroden passen de stroomsterkte aan voor kleinere lichamen." },
+        { q: "Wat doe je bij vergiftiging via de mond?", a: ["Laten braken", "Melk drinken", "Mond spoelen en 112 bellen", "Niets doen"], correct: 2, expl: "Braken kan de slokdarm extra beschadigen. Volg instructies van experts." },
+        { q: "Wat is shock?", a: ["Bang zijn", "Tekort aan bloedvolume/druk", "Heel hard gillen", "Flauwvallen"], correct: 1, expl: "Shock is een medische noodsituatie waarbij organen te weinig bloed krijgen." },
+        { q: "Iemand heeft een voorwerp in de wond?", a: ["Eruit trekken", "Laten zitten en fixeren", "Schoonmaken", "Dieper duwen"], correct: 1, expl: "Het voorwerp kan de bloeding deels stelpen; verwijderen kan een bloedbad veroorzaken." },
+        { q: "Kleur van de huid bij shock?", a: ["Rood", "Blauw", "Bleek en klam", "Geel"], correct: 2, expl: "Het lichaam trekt bloed weg uit de huid naar vitale organen." },
+        { q: "Wat doe je bij een zonnesteek?", a: ["In de zon blijven", "Koelen en vocht toedienen", "Heet douchen", "Hard rennen"], correct: 1, expl: "Verplaats het slachtoffer naar de schaduw en koel het lichaam af." },
+        { q: "Wat zeg je tegen 112?", a: ["Alleen je naam", "Locatie, wat er gebeurd is, aantal slachtoffers", "Niets, zij weten alles", "Dat je bang bent"], correct: 1, expl: "Duidelijke informatie helpt de centralist de juiste hulp te sturen." },
+        { q: "Wie heeft de leiding bij een ongeval?", a: ["De luidste persoon", "De eerste professionele hulpverlener", "Niemand", "De politie pas na een uur"], correct: 1, expl: "Zodra ambulance of politie er is, nemen zij de coördinatie over." }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    function loadQuestion() {
+        const qData = questions[currentQ];
+        document.getElementById("current-idx").innerText = currentQ + 1;
+        document.getElementById("question").innerText = qData.q;
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = "";
+        document.getElementById("feedback").style.display = "none";
+        document.getElementById("next-button").style.display = "none";
+
+        qData.a.forEach((text, index) => {
+            const btn = document.createElement("button");
+            btn.classList.add("option-btn");
+            btn.innerText = text;
+            btn.onclick = () => selectOption(index);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function selectOption(index) {
+        const qData = questions[currentQ];
+        const feedback = document.getElementById("feedback");
+        const buttons = document.querySelectorAll(".option-btn");
+        buttons.forEach(btn => btn.disabled = true);
+
+        if (index === qData.correct) {
+            score++;
+            buttons[index].style.backgroundColor = "var(--primary-green)";
+            buttons[index].style.color = "white";
+            feedback.className = "feedback-box correct";
+            feedback.innerHTML = "<strong>Correct!</strong><br>" + qData.expl;
+        } else {
+            buttons[index].style.backgroundColor = "var(--primary-red)";
+            buttons[index].style.color = "white";
+            feedback.className = "feedback-box incorrect";
+            feedback.innerHTML = "<strong>Fout.</strong> Het juiste antwoord was: " + qData.a[qData.correct] + "<br><br>" + qData.expl;
+        }
+        feedback.style.display = "block";
+        document.getElementById("next-button").style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        if (currentQ < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        document.getElementById("quiz-screen").style.display = "none";
+        document.getElementById("result-screen").style.display = "block";
+        document.getElementById("final-score").innerText = score;
+        let msg = score >= 15 ? "Geweldig! Je bent goed voorbereid." : "Blijf oefenen, EHBO is belangrijk!";
+        document.getElementById("score-message").innerText = msg;
+    }
+
+    let flashlightStream = null;
+    let flashlightTrack = null;
+
+    function toggleDarkMode() { document.body.classList.toggle("dark"); }
+    
+    async function toggleFlashlight() { 
+        try {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Zaklamp niet ondersteund op deze browser.');
+                return;
+            }
+
+            if (flashlightTrack) {
+                try {
+                    await flashlightTrack.applyConstraints({ advanced: [{ torch: false }] });
+                    flashlightTrack.stop();
+                    flashlightStream.getTracks().forEach(track => track.stop());
+                    flashlightTrack = null;
+                    flashlightStream = null;
+                } catch (e) {
+                    console.error('Error turning off flashlight:', e);
+                }
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        advanced: [{ torch: true }]
+                    }
+                });
+                flashlightStream = stream;
+                flashlightTrack = stream.getVideoTracks()[0];
+            } catch (e) {
+                console.log('Trying alternative method for flashlight...');
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                const track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+                if (capabilities.torch) {
+                    try {
+                        await track.applyConstraints({ advanced: [{ torch: true }] });
+                        flashlightStream = stream;
+                        flashlightTrack = track;
+                    } catch (constraintErr) {
+                        track.stop();
+                        stream.getTracks().forEach(t => t.stop());
+                        alert('Zaklamp kan niet worden ingeschakeld op dit apparaat.');
+                        return;
+                    }
+                } else {
+                    track.stop();
+                    stream.getTracks().forEach(t => t.stop());
+                    alert('Zaklamp niet beschikbaar op dit apparaat.');
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('Zaklamp fout:', error);
+            if (error.name === 'NotAllowedError') {
+                alert('Zaklamp toestemming geweigerd. Zet dit in je instellingen aan.');
+            } else if (error.name === 'NotFoundError') {
+                alert('Camera niet gevonden op dit apparaat.');
+            } else {
+                alert('Kan de zaklamp niet inschakelen. Mogelijke oorzaken: geen camera, geen toestemming, of onvoldoende Android versie (minimaal Android 5).');
+            }
+        }
+    }
+    loadQuestion();
+</script>
+</body>
+</html>
