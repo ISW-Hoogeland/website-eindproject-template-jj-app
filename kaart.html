@@ -7,70 +7,23 @@
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <style>
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; }
-        
-        /* Kaart moet ruimte overlaten voor de navigatie onderaan */
-        #map { height: calc(100vh - 70px); width: 100vw; }
-
-        /* --- STYLING NAVIGATIEBALK --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 70px;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid #ddd;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            z-index: 2000; /* Zorg dat dit boven de kaart zweeft */
-        }
-
-        .nav-item {
-            text-decoration: none;
-            color: #555;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.8rem;
-        }
-
-        .nav-item span { font-size: 1.5rem; margin-bottom: 2px; }
-        .nav-item.active { color: #007bff; font-weight: bold; }
-
-        /* Speciale knoppen styling */
-        .btn-top {
-            padding: 8px 12px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .btn-trainen { background: #ffc107; color: #000; }
-        .btn-112 { background: #dc3545; color: white; animation: pulse 2s infinite; }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-    </style>
+    <style>\n        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; }\n        \n        /* Kaart moet ruimte overlaten voor de navigatie boven- en onderaan */\n        #map { height: calc(100vh - 140px); width: 100vw; }\n\n        /* --- STYLING TOP NAVIGATIEBALK --- */\n        .top-nav {\n            position: fixed;\n            top: 0;\n            width: 100%;\n            height: 70px;\n            background-color: #ffffff;\n            display: flex;\n            justify-content: space-around;\n            align-items: center;\n            border-bottom: 1px solid #ddd;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            z-index: 2000;\n            gap: 10px;\n            padding: 0 10px;\n        }\n\n        /* --- STYLING BOTTOM NAVIGATIEBALK --- */\n        .bottom-nav {\n            position: fixed;\n            bottom: 0;\n            width: 100%;\n            height: 70px;\n            background-color: #ffffff;\n            display: flex;\n            justify-content: space-around;\n            align-items: center;\n            border-top: 1px solid #ddd;\n            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);\n            z-index: 2000; /* Zorg dat dit boven de kaart zweeft */\n        }\n\n        .nav-item {\n            text-decoration: none;\n            color: #555;\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            font-size: 0.8rem;\n        }\n\n        .nav-item span { font-size: 1.5rem; margin-bottom: 2px; }\n        .nav-item.active { color: #007bff; font-weight: bold; }\n\n        /* Speciale knoppen styling */\n        .btn-top {\n            padding: 8px 12px;\n            border-radius: 20px;\n            text-decoration: none;\n            font-weight: bold;\n            font-size: 0.9rem;\n        }\n\n        .btn-trainen { background: #ffc107; color: #000; }\n        .btn-112 { background: #dc3545; color: white; animation: pulse 2s infinite; }\n\n        @keyframes pulse {\n            0% { transform: scale(1); }\n            50% { transform: scale(1.05); }\n            100% { transform: scale(1); }\n        }\n    </style>
 </head>
 <body>
+
+    <nav class="top-nav">
+        <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+        <a href="tel:112" class="btn-top btn-112">📞 112</a>
+    </nav>
 
     <div id="map"></div>
 
     <nav class="bottom-nav">
-        <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
         <a href="index.html" class="btn-top nav-item"><span>🏠</span>Home</a>
         <a href="ehbo-gids.html" class="btn-top nav-item"><span>📖</span>Gids</a>
         <a href="kaart.html" class="btn-top nav-item active"><span>🗺️</span>AED Kaart</a>
         <a href="slachtoffer.html" class="btn-top nav-item"><span>🩹</span>Slachtoffer</a>
         <a href="coördineren-hulp.html" class="btn-top nav-item"><span>📣</span>Coördinatie</a>
-        <a href="tel:112" class="btn-top btn-112">📞 112</a>
     </nav>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

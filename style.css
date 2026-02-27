@@ -34,7 +34,8 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-top: 160px; /* Ruimte voor navigatie en menu */
+    padding-top: 140px; /* Ruimte voor top navigatie */
+    padding-bottom: 75px; /* Ruimte voor bottom navigatie */
 }
 
 /* --- HEADER --- */
@@ -144,6 +145,21 @@ header {
     color: var(--text);
     font-size: 1.5rem;
     cursor: pointer;
+}
+
+.top-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 70px;
+    background-color: var(--nav-bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    gap: 10px;
+    padding: 0 10px;
 }
 
 .bottom-nav {
@@ -258,6 +274,10 @@ body {
 .card-icon { font-size: 2rem; margin-right: 20px; }
 .card-victim { border-left: 8px solid var(--primary-red); }
 .card-coord { border-left: 8px solid var(--primary-blue); }
+.card-location { 
+    border-left: 8px solid #f39c12;
+    cursor: default;
+}
 .card-quiz { border-left: 8px solid var(--primary-green); }
 
 /* Status Bar */

@@ -8,15 +8,17 @@
 </head>
 <body>
 
+<nav class="top-nav">
+    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <a href="tel:112" class="btn-top btn-112">📞 112</a>
+</nav>
 
 <nav class="bottom-nav">
-    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
     <a href="index.html" class="btn-top nav-item active"><span>🏠</span>Home</a>
     <a href="ehbo-gids.html" class="btn-top nav-item"><span>📖</span>EHBO Gids</a>
     <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
     <a href="slachtoffer.html" class="btn-top nav-item"><span>🩹</span>Slachtoffer</a>
     <a href="coördineren-hulp.html" class="btn-top nav-item"><span>📣</span>Coördinatie</a>
-    <a href="tel:112" class="btn-top btn-112">📞 112</a>
 </nav>
 
 <main class="main-content">
@@ -35,6 +37,14 @@
                 <p>Leid de hulpverlening</p>
             </div>
         </a>
+        <div class="card card-location">
+            <span class="card-icon">📍</span>
+            <div class="card-text">
+                <h2>Mijn Locatie</h2>
+                <p id="location-status">Locatie ophalen...</p>
+                <div id="location-details" style="font-size: 0.9rem; margin-top: 8px; color: #666;"></div>
+            </div>
+        </div>
         <a href="quiz.html" class="card card-quiz">
             <span class="card-icon">❓</span>
             <div class="card-text">
@@ -50,6 +60,66 @@
 </main>
 
 <script>
+    // Locatie functionaliteit
+    async function getReverseGeocode(lat, lon) {
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`);
+            const data = await response.json();
+            return data.address;
+        } catch (error) {
+            console.error('Reverse geocoding error:', error);
+            return null;
+        }
+    }
+    
+    function requestLocationPermission() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    
+                    // Update de locatie informatie
+                    document.getElementById('location-status').textContent = '✓ Locatie gevonden';
+                    document.getElementById('location-details').innerHTML = 'Adres ophalen...';
+                    
+                    // Haal adres informatie op
+                    const address = await getReverseGeocode(lat, lon);
+                    
+                    if (address) {
+                        const street = address.road || address.footway || '';
+                        const houseNumber = address.house_number || '';
+                        const city = address.city || address.town || address.village || '';
+                        
+                        let addressLine = '';
+                        if (street && houseNumber) {
+                            addressLine = `${street} ${houseNumber}`;
+                        } else if (street) {
+                            addressLine = street;
+                        }
+                        
+                        document.getElementById('location-details').innerHTML = 
+                            `${addressLine}<br>${city}`;
+                    } else {
+                        document.getElementById('location-details').innerHTML = 
+                            `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+                    }
+                },
+                function(error) {
+                    document.getElementById('location-status').textContent = '✗ Locatie niet beschikbaar';
+                    document.getElementById('location-details').textContent = 'Geef toestemming voor locatie toegang';
+                }
+            );
+        } else {
+            document.getElementById('location-status').textContent = 'Geolocation niet ondersteund';
+        }
+    }
+    
+    // Vraag om locatie toestemming wanneer de pagina laadt
+    window.addEventListener('load', function() {
+        requestLocationPermission();
+    });
+    
     function toggleDarkMode() { 
         document.body.classList.toggle("dark-mode"); 
     }
