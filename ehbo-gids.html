@@ -32,6 +32,7 @@
                 
                 <p><strong>4. Borstcompressies:</strong> 30 keer in hoog tempo (100-120 bpm).</p>
                 <p><strong>5. Beademing:</strong> 2 keer kort blazen (indien getraind).</p>
+                <p><em>Tip:</em> wissel om de twee minuten van hulpverlener om vermoeidheid te voorkomen.</p>
             </div>
         </div>
 
@@ -48,6 +49,7 @@
 [Image of the Heimlich maneuver steps]
 
                 <p><strong>3. Heimlich greep:</strong> 5 keer krachtig trekken boven de navel.</p>
+                <p><em>Tip:</em> bij kinderen gebruik minder kracht en controleer na elke poging of het voorwerp is losgeraakt.</p>
             </div>
         </div>
 
@@ -63,6 +65,7 @@
 [Image of the recovery position]
 
                 <p>Controleer elke minuut de ademhaling tot de ambulance er is.</p>
+                <p><em>Tip:</em> praat rustig tegen het slachtoffer, soms helpt contact om bewustzijn terug te winnen.</p>
             </div>
         </div>
 
@@ -75,6 +78,113 @@
                 <p><strong>Eerst water, de rest komt later.</strong></p>
                 <p>Minimaal 10-20 minuten koelen met lauw, zacht stromend kraanwater.</p>
                 <p>Verwijder kleding alleen als deze niet aan de wond kleeft.</p>
+                <p><em>Tip:</em> overleg bij twijfel met de huisarts of 112 bij zeer grote/verbrande gebieden.</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('bleeding')">
+            <div class="card-header">
+                <span class="guide-icon">🩸</span>
+                <h3>Bloeding stoppen</h3>
+            </div>
+            <div id="bleeding" class="guide-details">
+                <p><strong>1. Druk uitoefenen:</strong> Gebruik een schone doek en druk stevig op de wond.</p>
+                <p><strong>2. Elevatie:</strong> Til het getroffen gebied op boven het hart.</p>
+                <p><strong>3. Vervang verband:</strong> Blijf druk uitoefenen; vervang het natte verband niet.</p>
+                <p><strong>4. 112 bellen:</strong> Als de bloeding niet stopt of bij grote wonden.</p>
+                <p><em>Tip:</em> probeer niet teveel te bewegen, daalt de bloeddruk kan het bloedverlies verminderen.</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('poison')">
+            <div class="card-header">
+                <span class="guide-icon">☠️</span>
+                <h3>Vergiftiging</h3>
+            </div>
+            <div id="poison" class="guide-details">
+                <p><strong>1. Identificeer de bron:</strong> Wat is ingenomen of ingeademd?</p>
+                <p><strong>2. Bel het antigifcentrum:</strong> 030-274 8888 in Nederland.</p>
+                <p><strong>3. Houd slachtoffer rustig:</strong> geen braken opwekken zonder advies.</p>
+                <p><em>Tip:</em> neem verpakking of label mee naar de telefoon voor het antigifcentrum.</p>                <p>Volg exact de instructies van het antigifcentrum en noem de hoeveelheid en tijd van inname.</p>
+            </div>
+        </div>
+
+        <!-- extra onderwerpen -->
+        <div class="guide-card" onclick="toggleDetails('shock')">
+            <div class="card-header">
+                <span class="guide-icon">😨</span>
+                <h3>Shock</h3>
+            </div>
+            <div id="shock" class="guide-details">
+                <p><strong>1. Leg het slachtoffer plat</strong> en til benen op (indien geen rug/nekletsel).</p>
+                <p><strong>2. Houd warm:</strong> dek af met deken, verwijder strakke kleding.</p>
+                <p><strong>3. Geef geen drinken:</strong> kan misselijkheid veroorzaken.</p>
+                <p><em>Tip:</em> blijf kalm; noteer eventuele bloedingen of verwondingen voor hulpdiensten.</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('fracture')">
+            <div class="card-header">
+                <span class="guide-icon">🦴</span>
+                <h3>Botbreuk</h3>
+            </div>
+            <div id="fracture" class="guide-details">
+                <p><strong>1. Immobiliseer:</strong> gebruik spalk of zachte ondersteuning tegen beweging.</p>
+                <p><strong>2. Vermijd druk:</strong> raak het gebroken gebied niet onnodig aan.</p>
+                <p><strong>3. Koelen:</strong> apply ijskompres met doek om zwelling te verminderen.</p>
+                <p><em>Tip:</em> bel 112 bij afwijkende stand of niet beloopbare persoon.</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('hypothermia')">
+            <div class="card-header">
+                <span class="guide-icon">❄️</span>
+                <h3>Hypothermie</h3>
+            </div>
+            <div id="hypothermia" class="guide-details">
+                <p><strong>1. Breng binnen:</strong> naar warme plaats of beschutting.</p>
+                <p><strong>2. Verwarm geleidelijk:</strong> met dekens, verwarmingen, warm drinken (als bij bewustzijn).</p>
+                <p><strong>3. Bel 112:</strong> als alleen trillingen groter zijn of bewustzijn daalt.</p>
+                <p><em>Tip:</em> schud niet; kan hartproblemen veroorzaken.</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('heatstroke')">
+            <div class="card-header">
+                <span class="guide-icon">☀️</span>
+                <h3>Hitteberoerte</h3>
+            </div>
+            <div id="heatstroke" class="guide-details">
+                <p><strong>1. Verplaats naar schaduw:</strong> koel lichaam af met water en ventilator.</p>
+                <p><strong>2. Koolhydraten & vocht:</strong> indien bij bewustzijn, geef water met zout en suiker.</p>
+                <p><strong>3. 112 bellen:</strong> als koorts >40°C of verlies bewustzijn.</p>
+                <p><em>Tip:</em> geen alcohol; kan uitdroging verergeren.</p>
+            </div>
+        </div>
+
+        <div class="guide-card urgent" onclick="toggleDetails('allergy')">
+            <div class="card-header">
+                <span class="guide-icon">🤧</span>
+                <h3>Allergische reactie</h3>
+            </div>
+            <div id="allergy" class="guide-details">
+                <p><strong>1. Epinefrine:</strong> indien beschikbaar, spuit met EpiPen in de buitenkant van de dij.</p>
+                <p><strong>2. Bel 112 direct:</strong> zelfs als symptoom tijdelijk vermindert.</p>
+                <p><strong>3. Laat liggen met benen omhoog:</strong> vermijd staan/buigen.</p>
+                <p><em>Tip:</em> verwijder allergenen zoals bijen- of voedselresten uit mond/vel.</p>            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('water')">
+            <div class="card-header">
+                <span class="guide-icon">🌊</span>
+                <h3>Uit het water</h3>
+            </div>
+            <div id="water" class="guide-details">
+                <p><strong>1. Veiligheid eerst:</strong> breng uzelf niet in gevaar bij het slachtoffer halen.</p>
+                <p><strong>2. Controleer ademhaling:</strong> geen adem? start direct met reanimatie volgens de stappen.</p>
+                <p><strong>3. Warm houden:</strong> verwijder natte kleren en dek af met droge kleding of deken.</p>
+                <p><strong>4. Bel 112:</strong> medische hulp is nodig, ook bij schijnbaar normaal ademhalen.</p>
+                <p><em>Tip:</em> geef geen warme dranken; laat ambulancepersoneel onderkoeling behandelen.</p>
             </div>
         </div>
     </section>
@@ -115,9 +225,6 @@
             detail.style.display = "block";
         }
     }
-
-    let flashlightStream = null;
-    let flashlightTrack = null;
 
     function toggleDarkMode() { document.body.classList.toggle("dark"); }
     
