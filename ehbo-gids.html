@@ -293,6 +293,25 @@
             }
         }
     }
+
+    // zoekfunctie filtert de kaarten op basis van zoekterm
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('.search-bar');
+        const cards = document.querySelectorAll('.guide-card');
+
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value.trim().toLowerCase();
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>
