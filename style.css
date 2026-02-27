@@ -198,7 +198,7 @@ header {
 .btn-lang {
     background: var(--bg-light);
     color: var(--text);
-    padding: 6px 8px;
+    padding: px 6px;
     border-radius: 8px;
     border: 1px solid var(--border);
     font-weight: bold;
