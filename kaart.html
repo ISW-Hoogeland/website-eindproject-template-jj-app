@@ -4,15 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AED Kaart & Navigatie</title>
-    
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <style>\n        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; }\n        \n        /* Kaart moet ruimte overlaten voor de navigatie boven- en onderaan */\n        #map { height: calc(100vh - 140px); width: 100vw; }\n\n        /* --- STYLING TOP NAVIGATIEBALK --- */\n        .top-nav {\n            position: fixed;\n            top: 0;\n            width: 100%;\n            height: 70px;\n            background-color: #ffffff;\n            display: flex;\n            justify-content: space-around;\n            align-items: center;\n            border-bottom: 1px solid #ddd;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            z-index: 2000;\n            gap: 10px;\n            padding: 0 10px;\n        }\n\n        /* --- STYLING BOTTOM NAVIGATIEBALK --- */\n        .bottom-nav {\n            position: fixed;\n            bottom: 0;\n            width: 100%;\n            height: 70px;\n            background-color: #ffffff;\n            display: flex;\n            justify-content: space-around;\n            align-items: center;\n            border-top: 1px solid #ddd;\n            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);\n            z-index: 2000; /* Zorg dat dit boven de kaart zweeft */\n        }\n\n        .nav-item {\n            text-decoration: none;\n            color: #555;\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            font-size: 0.8rem;\n        }\n\n        .nav-item span { font-size: 1.5rem; margin-bottom: 2px; }\n        .nav-item.active { color: #007bff; font-weight: bold; }\n\n        /* Speciale knoppen styling */\n        .btn-top {\n            padding: 8px 12px;\n            border-radius: 20px;\n            text-decoration: none;\n            font-weight: bold;\n            font-size: 0.9rem;\n        }\n\n        .btn-trainen { background: #ffc107; color: #000; }\n        .btn-112 { background: #dc3545; color: white; animation: pulse 2s infinite; }\n\n        @keyframes pulse {\n            0% { transform: scale(1); }\n            50% { transform: scale(1.05); }\n            100% { transform: scale(1); }\n        }\n    </style>
+    <style>
+        #map { 
+            height: calc(100vh - 140px); 
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            margin: 0;
+            padding-top: 70px;
+            padding-bottom: 70px;
+        }
+    </style>
 </head>
 <body>
 
     <nav class="top-nav">
         <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+        <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
         <a href="tel:112" class="btn-top btn-112">📞 112</a>
     </nav>
 
@@ -28,7 +41,100 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Initialiseer kaart (zoals in vorige stap)
+        // Zaklamp variabele
+        let flashlightStream = null;
+        let flashlightTrack = null;
+
+        // Dark mode functie
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+
+        // Verbeterde zaklamp functie voor Android
+        async function toggleFlashlight() {
+            try {
+                // Check browser support
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    alert('Zaklamp niet ondersteund op deze browser.');
+                    return;
+                }
+
+                // Als zaklamp al aan staat, zet uit
+                if (flashlightTrack) {
+                    try {
+                        await flashlightTrack.applyConstraints({ advanced: [{ torch: false }] });
+                        flashlightTrack.stop();
+                        flashlightStream.getTracks().forEach(track => track.stop());
+                        flashlightTrack = null;
+                        flashlightStream = null;
+                    } catch (e) {
+                        console.error('Error turning off flashlight:', e);
+                    }
+                    return;
+                }
+
+                // Zaklamp aan zetten
+                try {
+                    // Try with explicit torch constraint
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: {
+                            facingMode: 'environment',
+                            advanced: [{ torch: true }]
+                        }
+                    });
+                    
+                    flashlightStream = stream;
+                    flashlightTrack = stream.getVideoTracks()[0];
+                    
+                } catch (e) {
+                    // Fallback: probeer zonder torch constraint, dan apply constraint
+                    console.log('Trying alternative method for flashlight...');
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment' }
+                    });
+                    
+                    const track = stream.getVideoTracks()[0];
+                    const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+                    
+                    if (capabilities.torch) {
+                        try {
+                            await track.applyConstraints({ advanced: [{ torch: true }] });
+                            flashlightStream = stream;
+                            flashlightTrack = track;
+                        } catch (constraintErr) {
+                            track.stop();
+                            stream.getTracks().forEach(t => t.stop());
+                            alert('Zaklamp kan niet worden ingeschakeld op dit apparaat.');
+                            return;
+                        }
+                    } else {
+                        track.stop();
+                        stream.getTracks().forEach(t => t.stop());
+                        alert('Zaklamp niet beschikbaar op dit apparaat.');
+                        return;
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Zaklamp fout:', error);
+                // Probeer graceful fallback
+                if (error.name === 'NotAllowedError') {
+                    alert('Zaklamp toestemming geweigerd. Zet dit in je instellingen aan.');
+                } else if (error.name === 'NotFoundError') {
+                    alert('Camera niet gevonden op dit apparaat.');
+                } else {
+                    alert('Kan de zaklamp niet inschakelen. Mogelijke oorzaken: geen camera, geen toestemming, of onvoldoende Android versie (minimaal Android 5).');
+                }
+            }
+        }
+
+        // Herstel dark mode instellingen
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Initialiseer kaart
         const map = L.map('map').setView([52.1326, 5.2913], 8);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap'

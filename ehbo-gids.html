@@ -10,6 +10,7 @@
 
 <nav class="top-nav">
     <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
     <a href="tel:112" class="btn-top btn-112">📞 112</a>
 </nav>
 
@@ -115,25 +116,74 @@
         }
     }
 
+    let flashlightStream = null;
+    let flashlightTrack = null;
+
     function toggleDarkMode() { document.body.classList.toggle("dark"); }
+    
     async function toggleFlashlight() { 
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            alert('Zaklamp niet ondersteund op deze browser.');
-            return;
-        }
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-            const track = stream.getVideoTracks()[0];
-            const cap = track.getCapabilities();
-            if (cap.torch) {
-                const current = track.getSettings().torch || false;
-                await track.applyConstraints({ advanced: [{ torch: !current }] });
-            } else {
-                alert('Zaklamp niet beschikbaar op dit apparaat.');
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Zaklamp niet ondersteund op deze browser.');
+                return;
             }
-        } catch (e) {
-            console.log('flashlight error', e);
-            alert('Kan de zaklamp niet inschakelen. Mogelijk ondersteunt je browser het niet.');
+
+            if (flashlightTrack) {
+                try {
+                    await flashlightTrack.applyConstraints({ advanced: [{ torch: false }] });
+                    flashlightTrack.stop();
+                    flashlightStream.getTracks().forEach(track => track.stop());
+                    flashlightTrack = null;
+                    flashlightStream = null;
+                } catch (e) {
+                    console.error('Error turning off flashlight:', e);
+                }
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        advanced: [{ torch: true }]
+                    }
+                });
+                flashlightStream = stream;
+                flashlightTrack = stream.getVideoTracks()[0];
+            } catch (e) {
+                console.log('Trying alternative method for flashlight...');
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                const track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+                if (capabilities.torch) {
+                    try {
+                        await track.applyConstraints({ advanced: [{ torch: true }] });
+                        flashlightStream = stream;
+                        flashlightTrack = track;
+                    } catch (constraintErr) {
+                        track.stop();
+                        stream.getTracks().forEach(t => t.stop());
+                        alert('Zaklamp kan niet worden ingeschakeld op dit apparaat.');
+                        return;
+                    }
+                } else {
+                    track.stop();
+                    stream.getTracks().forEach(t => t.stop());
+                    alert('Zaklamp niet beschikbaar op dit apparaat.');
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('Zaklamp fout:', error);
+            if (error.name === 'NotAllowedError') {
+                alert('Zaklamp toestemming geweigerd. Zet dit in je instellingen aan.');
+            } else if (error.name === 'NotFoundError') {
+                alert('Camera niet gevonden op dit apparaat.');
+            } else {
+                alert('Kan de zaklamp niet inschakelen. Mogelijke oorzaken: geen camera, geen toestemming, of onvoldoende Android versie (minimaal Android 5).');
+            }
         }
     }
 </script>
