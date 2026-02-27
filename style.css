@@ -198,12 +198,30 @@ header {
 .btn-lang {
     background: var(--bg-light);
     color: var(--text);
-    padding: px 6px;
+    /* mirror info-btn dimensions */
+    padding: 6px 8px;
     border-radius: 8px;
     border: 1px solid var(--border);
     font-weight: bold;
     font-size: 0.85rem;
     height: 36px;
+    min-width: 60px;
+    appearance: none; /* remove default select arrow styling for consistency */
+    /* use flexbox inside select to perfectly center the emoji */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* ensure the selected flag is centered horizontally */
+    text-align: center;
+    text-align-last: center; /* some browsers need this for centering the selected value */
+    /* vertical adjustment: nudge slightly upward so emoji sits in middle of middle */
+    transform: translateY(-1px);
+    line-height: normal; /* not needed when using flexbox */
+}
+.btn-lang option {
+    text-align: center;
+    /* options inherit same height to keep the flag centered on opened list */
+    line-height: 36px;
 }
 
 .info-btn {
@@ -440,11 +458,23 @@ body {
     padding: 15px;
     box-shadow: var(--shadow);
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s, border 0.2s;
+    border: 1px solid var(--border-light);
+}
+
+.guide-card:hover {
+    transform: scale(1.05);
+    border: 2px solid var(--primary-blue);
+}
+
+/* also target urgent cards on hover explicitly in case the later rule would override */
+.guide-card.urgent:hover {
+    border: 2px solid var(--primary-blue);
 }
 
 .guide-card.urgent {
-    border: 2px solid var(--primary-red);
+    /* urgent cards no longer have a persistent red border; they rely on hover effect for emphasis */
+    border: 1px solid var(--border-light);
 }
 
 .card-header {

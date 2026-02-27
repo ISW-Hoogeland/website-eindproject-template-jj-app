@@ -11,11 +11,11 @@
 <nav class="top-nav">
     <div class="nav-left">
         <select id="languageSelect" class="btn-lang" onchange="changeLanguage(this.value)">
-            <option value="nl">🇳🇱 Nederlands</option>
-            <option value="en">🇬🇧 English</option>
-            <option value="de">🇩🇪 Deutsch</option>
-            <option value="fr">🇫🇷 Français</option>
-            <option value="es">🇪🇸 Español</option>
+            <option value="nl">🇳🇱</option>
+            <option value="en">🇬🇧</option>
+            <option value="de">🇩🇪</option>
+            <option value="fr">🇫🇷</option>
+            <option value="es">🇪🇸</option>
         </select>
         <a href="quiz.html" class="btn-top btn-trainen" data-i18n="train">Trainen</a>
     </div>
@@ -27,7 +27,7 @@
 </nav>
 
 <main class="main-content victim-page">
-    <h2>Stappenplan: Patiënt in Leven Houden</h2>
+    <h2 data-i18n="pageTitle">Stappenplan: Patiënt in Leven Houden</h2>
     
     <div class="step-container" id="stepContainer">
         <!-- Stappen worden ingevuld door JavaScript -->
@@ -191,10 +191,10 @@
     // Taal en vertalingen
     let currentLang = localStorage.getItem('language') || 'nl';
     const translations = {
-        nl:{train:'Trainen',call112:'📞 112',home:'Home',flashlight:'Zaklamp',darkmode:'Donker',aedmap:'AED Kaart',infoTitle:'Noodhulp App — versie 1.0',infoBody:'Gebruik deze app voor EHBO snelhulp en navigatie.'},
-        en:{train:'Training',call112:'📞 112',home:'Home',flashlight:'Flashlight',darkmode:'Dark mode',aedmap:'AED Map',infoTitle:'Emergency App — v1.0',infoBody:'Use this app voor quick first aid and navigation.'},
+        nl:{train:'Trainen',call112:'📞 112',home:'Home',flashlight:'Zaklamp',darkmode:'Donker',aedmap:'AED Kaart',infoTitle:'Noodhulp App — versie 1.0',infoBody:'Gebruik deze app voor EHBO snelhulp en navigatie.',pageTitle:'Stappenplan: Patiënt in Leven Houden',victimSteps:[{title:'Controleer je eigen veiligheid',desc:'Zorg dat je zelf veilig bent voordat je hulp biedt. Controleer omliggende gevaren.'},{title:'Spreek het slachtoffer aan',desc:'Probeer reactiviteit vast te stellen. Spreek luid en aanwijzingen. Schouder aanraken.'},{title:'Bel 112 voor hulp',desc:'Bel onmiddellijk 112. Zet op luidspreker. Wacht op instructies van de alarmcentrale.'},{title:'Check de ademhaling',desc:'Kijk, luister en voel of het slachtoffer ademt. Dit mag niet langer dan 10 seconden zijn.'},{title:'Reanimatie Geven (CPR)',desc:'<strong>30 borstcompressies:</strong> Plaats je handen op het midden van de borst. Duw met volle kracht 5-6cm diep, 100-120 per minuut. <strong>2 beademingen:</strong> Blow 2 keer kort in (als getraind). Herhaal dit ritme totdat de ambulance er is.'},{title:'Zet in stabiele zijligging',desc:'Als onbewust maar ademend: draai voorzichtig in de stabiele zijligging om verstikking te voorkomen.'},{title:'Monitor de patiënt',desc:'Blijf ademhaling controleren. Let op veranderingen. Zorg voor warmte en troost.'},{title:'Bloeding stoppen',desc:'Druk stevig op de wond met een schone doek of verband. Houd de druk vast en leg het gewonde lichaamsdeel indien mogelijk omhoog.'},{title:'Wacht op hulpdiensten',desc:'Blijf bij het slachtoffer tot hulpdiensten arriveren. Volg hun instructies op.'}]},
+        en:{train:'Training',call112:'📞 112',home:'Home',flashlight:'Flashlight',darkmode:'Dark mode',aedmap:'AED Map',infoTitle:'Emergency App — v1.0',infoBody:'Use this app voor quick first aid and navigation.',pageTitle:'Steps: Keeping a Patient Alive',victimSteps:[{title:'Check your own safety',desc:'Ensure you are safe before offering help. Check for surrounding hazards.'},{title:'Address the victim',desc:'Try to determine responsiveness. Speak loudly and give directions. Touch shoulder.'},{title:'Call 112 for help',desc:'Call 112 immediately. Put on speaker. Wait for instructions from the control center.'},{title:'Check breathing',desc:'Look, listen and feel if the victim is breathing. This should not take more than 10 seconds.'},{title:'Give CPR',desc:'<strong>30 chest compressions:</strong> Place your hands on the center of the chest. Push with full force 5–6cm deep, 100–120 per minute. <strong>2 breaths:</strong> Blow twice shortly (if trained). Repeat this rhythm until the ambulance arrives.'},{title:'Place in recovery position',desc:'If unconscious but breathing: gently turn into the recovery position to prevent choking.'},{title:'Monitor the patient',desc:'Keep checking breathing. Watch for changes. Provide warmth and comfort.'},{title:'Stop bleeding',desc:'Press firmly on the wound with a clean cloth or bandage. Maintain pressure and elevate the injured limb if possible.'},{title:'Wait for emergency services',desc:'Stay with the victim until help arrives. Follow their instructions.'}]},
         de:{train:'Training',call112:'📞 112',home:'Start',flashlight:'Taschenlampe',darkmode:'Nachtmodus',aedmap:'AED Karte',infoTitle:'Notfall-App — v1.0',infoBody:'Verwenden Sie diese App für Erste Hilfe und Navigation.'},
-        fr:{train:'Entraînement',call112:'📞 112',home:'Accueil',flashlight:'Lampe de poche',darkmode:'Mode sombre',aedmap:'Carte AED',infoTitle:'Application d’urgence — v1.0',infoBody:'Utilisez cette app pour les premiers secours et la navigation.'},
+fr:{train:'Entraînement',call112:'📞 112',home:'Accueil',flashlight:'Lampe de poche',darkmode:'Mode sombre',aedmap:'Carte AED',infoTitle:'Application d’urgence — v1.0',infoBody:'Utilisez cette app voor les premiers secours en la navigation.',pageTitle:'Plan d’étapes : garder un patient en vie',victimSteps:[{title:'Vérifiez votre propre sécurité',desc:'Assurez-vous que vous êtes en sécurité avant d’aider. Vérifiez les dangers environnants.'},{title:'Adressez-vous à la victime',desc:'Essayez de déterminer la réactivité. Parlez fort et donnez des instructions. Touchez l’épaule.'},{title:'Appelez le 112',desc:'Appelez le 112 immédiatement. Met en haut-parleur. Attendez les instructions du centre d’appel.'},{title:'Vérifiez la respiration',desc:'Regardez, écoutez et sentez si la victime respire. Cela ne doit pas durer plus de 10 secondes.'},{title:'Faites la réanimation',desc:'<strong>30 compressions thoraciques :</strong> Placez vos mains au centre de la poitrine. Poussez met force 5–6 cm de profondeur, 100–120 par minute. <strong>2 insufflations :</strong> Soufflez twee fois rapidement (si formé). Répétez ce rythme jusqu’à l’arrivée de l’ambulance.'},{title:'Placez en position latérale de sécurité',desc:'Si inconscient maar respirant : tournez doucement en position latérale de sécurité pour éviter l’étouffement.'},{title:'Surveillez le patient',desc:'Continuez à vérifier la respiration. Surveillez les changements. Fournissez chaleur et réconfort.'},{title:'Arrêtez le saignement',desc:'Appuyez fermement sur la plaie met un chiffon propre of bandage. Maintenez la pression en élevez le membre blessé si possible.'},{title:'Attendez les secours',desc:'Restez auprès de la victime jusqu’à l’arrivée des secours. Suivez leurs instructions.'}]},
         es:{train:'Entrenamiento',call112:'📞 112',home:'Inicio',flashlight:'Linterna',darkmode:'Modo oscuro',aedmap:'Mapa AED',infoTitle:'App de emergencia — v1.0',infoBody:'Usa esta app para primeros auxilios y navegación.'}
     };
     function applyTranslations(lang){

@@ -11,11 +11,11 @@
 <nav class="top-nav">
     <div class="nav-left">
         <select id="languageSelect" class="btn-lang" onchange="changeLanguage(this.value)">
-            <option value="nl">🇳🇱 Nederlands</option>
-            <option value="en">🇬🇧 English</option>
-            <option value="de">🇩🇪 Deutsch</option>
-            <option value="fr">🇫🇷 Français</option>
-            <option value="es">🇪🇸 Español</option>
+            <option value="nl">🇳🇱</option>
+            <option value="en">🇬🇧</option>
+            <option value="de">🇩🇪</option>
+            <option value="fr">🇫🇷</option>
+            <option value="es">🇪🇸</option>
         </select>
         <a href="quiz.html" class="btn-top btn-trainen" data-i18n="train">Trainen</a>
     </div>
@@ -45,6 +45,10 @@
                 <p><strong>4. Borstcompressies:</strong> 30 keer in hoog tempo (100-120 bpm).</p>
                 <p><strong>5. Beademing:</strong> 2 keer kort blazen (indien getraind).</p>
                 <p><em>Tip:</em> wissel om de twee minuten van hulpverlener om vermoeidheid te voorkomen.</p>
+                <p>
+                    <button onclick="document.getElementById('cpr-audio').play();">Speel hartslag‑ritme</button>
+                </p>
+                <audio id="cpr-audio" src="hartslag.mp3" preload="auto"></audio>
             </div>
         </div>
 
@@ -199,6 +203,184 @@
                 <p><em>Tip:</em> geef geen warme dranken; laat ambulancepersoneel onderkoeling behandelen.</p>
             </div>
         </div>
+        <!-- additional topics added -->
+        <div class="guide-card" onclick="toggleDetails('stroke')">
+            <div class="card-header">
+                <span class="guide-icon">🧠</span>
+                <h3>Beroerte (FAST)</h3>
+            </div>
+            <div id="stroke" class="guide-details">
+                <p><strong>1.</strong> Herken symptomen: scheve mond, verwarde spraak of krachtverlies in één arm (FAST).</p>
+                <p><strong>2.</strong> Bel direct 112 en geef de symptomen door; noteer de tijd van de eerste klachten.</p>
+                <p><strong>3.</strong> Leg het slachtoffer rustig neer met het hoofd licht omhoog; steun hoofd en nek en blijf bij hem tot de hulp arriveert.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('chestpain')">
+            <div class="card-header">
+                <span class="guide-icon">💔</span>
+                <h3>Pijn op de borst</h3>
+            </div>
+            <div id="chestpain" class="guide-details">
+                <p><strong>1.</strong> Realiseer dat ernstige pijn op de borst een hartinfarct kan zijn.</p>
+                <p><strong>2.</strong> Laat het slachtoffer rustig zitten of liggen met het bovenlichaam iets omhoog; beweging vermijden.</p>
+                <p><strong>3.</strong> Bel 112 en volg de instructies van de alarmcentrale totdat de ambulance arriveert.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('seizure')">
+            <div class="card-header">
+                <span class="guide-icon">⚡</span>
+                <h3>Epileptische aanval</h3>
+            </div>
+            <div id="seizure" class="guide-details">
+                <p><strong>1.</strong> Verwijder harde of scherpe voorwerpen uit de buurt en plaats iets zachts onder het hoofd.</p>
+                <p><strong>2.</strong> Duw niets in de mond; noteer hoe lang de aanval duurt.</p>
+                <p><strong>3.</strong> Bel 112 als de aanval langer dan 5 minuten duurt, er verwondingen zijn of het slachtoffer niet wakker wordt.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('diabetes')">
+            <div class="card-header">
+                <span class="guide-icon">🍬</span>
+                <h3>Diabetes (Hypo/Hyper)</h3>
+            </div>
+            <div id="diabetes" class="guide-details">
+                <p><strong>1.</strong> Herken symptomen: bleekheid, trillen, verwarring kan hypo zijn; dorst, veel plassen kan hyper zijn.</p>
+                <p><strong>2.</strong> Bij hypo: geef snelwerkende koolhydraten (snoep, vruchtensap) als het slachtoffer bij bewustzijn is.</p>
+                <p><strong>3.</strong> Bij hyper: laat veel water drinken en volg insuline‑/medicatievoorschriften; bij twijfel 112 bellen.</p>
+                <p><strong>4.</strong> Bel 112 bij bewustzijnsverlies, ernstige verwarring of als de situatie verslechtert.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('nosebleed')">
+            <div class="card-header">
+                <span class="guide-icon">👃</span>
+                <h3>Bloedneus</h3>
+            </div>
+            <div id="nosebleed" class="guide-details">
+                <p><strong>1.</strong> Laat het slachtoffer rechtop zitten en licht naar voren leunen.</p>
+                <p><strong>2.</strong> Knijp de neusvleugels stevig gedurende 10‑15 seconden en adem door de mond.</p>
+                <p><strong>3.</strong> Herhaal indien nodig; houd het hoofd koel en zoek medische hulp als de bloeding blijft duren.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('eyeforeign')">
+            <div class="card-header">
+                <span class="guide-icon">👁️</span>
+                <h3>Vuil in oog</h3>
+            </div>
+            <div id="eyeforeign" class="guide-details">
+                <p><strong>1.</strong> Spoel het oog langzaam met schoon water of een oogdouche, van neus naar buiten.</p>
+                <p><strong>2.</strong> Vermijd wrijven; houd het oog open tijdens het spoelen.</p>
+                <p><strong>3.</strong> Bel medische hulp bij contact met chemicaliën of aanhoudende pijn.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('toothinjury')">
+            <div class="card-header">
+                <span class="guide-icon">🦷</span>
+                <h3>Tandletsel</h3>
+            </div>
+            <div id="toothinjury" class="guide-details">
+                <p><strong>1.</strong> Bewaar een kapotte of uitgeslagen tand direct in melk of eigen speeksel om uitdrogen te voorkomen.</p>
+                <p><strong>2.</strong> Bezoek onmiddellijk de spoedtandarts; neem de tand en een stukje weefsel mee in een gesloten bakje.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('bite')">
+            <div class="card-header">
+                <span class="guide-icon">🐝</span>
+                <h3>Insecten- of tekenbeet</h3>
+            </div>
+            <div id="bite" class="guide-details">
+                <p><strong>1.</strong> Verwijder de angel of teek met een steriel pincet; trek recht omhoog zonder te draaien.</p>
+                <p><strong>2.</strong> Reinig de plek met water en zeep.</p>
+                <p><strong>3.</strong> Observeer op roodheid, zwelling of allergische reactie; bel 112 bij ademhalingsproblemen of koorts.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('electrocution')">
+            <div class="card-header">
+                <span class="guide-icon">🔌</span>
+                <h3>Elektrocutie</h3>
+            </div>
+            <div id="electrocution" class="guide-details">
+                <p><strong>1.</strong> Zet de stroom uit of gebruik een droog, niet-geleidende stok om het slachtoffer los te maken.</p>
+                <p><strong>2.</strong> Controleer of het slachtoffer ademt en een hartslag heeft; begin direct met reanimatie als dat nodig is.</p>
+                <p><strong>3.</strong> Bel 112 en blijf bij het slachtoffer tot professionele hulp arriveert.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('animalbite')">
+            <div class="card-header">
+                <span class="guide-icon">🐾</span>
+                <h3>Dierenbeet</h3>
+            </div>
+            <div id="animalbite" class="guide-details">
+                <p><strong>1.</strong> Reinig de wond grondig met water en zeep.</p>
+                <p><strong>2.</strong> Bedek met steriel verband en oefen lichte druk uit om bloeding te stoppen.</p>
+                <p><strong>3.</strong> Ga naar een arts voor tetanuspreventie en om rabiësrisico te beoordelen.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('vomit')">
+            <div class="card-header">
+                <span class="guide-icon">🤮</span>
+                <h3>Hevig braken / Diarree</h3>
+            </div>
+            <div id="vomit" class="guide-details">
+                <p><strong>1.</strong> Geef kleine, frequente slokjes water of orale rehydratatieoplossing (ORS).</p>
+                <p><strong>2.</strong> Houd de persoon warm en rust bieden.</p>
+                <p><strong>3.</strong> Bel 112 als er bloed in braaksel of ontlasting zit, als braken onophoudelijk doorgaat of bij tekenen van ernstige uitdroging.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('headinjury')">
+            <div class="card-header">
+                <span class="guide-icon">🤕</span>
+                <h3>Hoofdletsel (Hersenschudding)</h3>
+            </div>
+            <div id="headinjury" class="guide-details">
+                <p><strong>1.</strong> Laat het slachtoffer rustig liggen en zorg dat hij niet verder beweegt.</p>
+                <p><strong>2.</strong> Controleer elke 30 minuten zijn alertheid, pupillen en ademhaling.</p>
+                <p><strong>3.</strong> Bel 112 als hij bewusteloos raakt, misselijk wordt of verward raakt.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('hyperventilation')">
+            <div class="card-header">
+                <span class="guide-icon">🎈</span>
+                <h3>Hyperventilatie</h3>
+            </div>
+            <div id="hyperventilation" class="guide-details">
+                <p><strong>1.</strong> Vraag het slachtoffer rustig te zitten en adem rustig uit in een papieren zak of met beide handen voor de mond.</p>
+                <p><strong>2.</strong> Stimuleer langzaam en diep ademen totdat de ademhaling normaliseert.</p>
+                <p><strong>3.</strong> Creëer een rustige omgeving; bel 112 als hij het bewustzijn verliest.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('poisonplant')">
+            <div class="card-header">
+                <span class="guide-icon">🍄</span>
+                <h3>Giftige planten</h3>
+            </div>
+            <div id="poisonplant" class="guide-details">
+                <p><strong>1.</strong> Spoel de huid grondig met water en zeep zonder te wrijven.</p>
+                <p><strong>2.</strong> Verwijder zoveel mogelijk plantresten voorzichtig.</p>
+                <p><strong>3.</strong> Bij inname of ernstige reactie bel 112 of het antigifcentrum; neem label of plantmonster mee.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('panic')">
+            <div class="card-header">
+                <span class="guide-icon">🆘</span>
+                <h3>Paniekaanval</h3>
+            </div>
+            <div id="panic" class="guide-details">
+                <p><strong>1.</strong> Blijf rustig en praat zacht, geef geruststelling dat het tijdelijk is.</p>
+                <p><strong>2.</strong> Laat hen langzaam en diep ademhalen; leid de aandacht af met oefeningen of tellen.</p>
+                <p><strong>3.</strong> Bel professionele hulp als de symptomen niet verminderen of gevaar ontstaat.</p>
+            </div>
+        </div>
+        <div class="guide-card" onclick="toggleDetails('splinter')">
+            <div class="card-header">
+                <span class="guide-icon">🤏</span>
+                <h3>Splinter of doorn</h3>
+            </div>
+            <div id="splinter" class="guide-details">
+                <p><strong>1.</strong> Was uw handen en het gebied grondig met water en zeep.</p>
+                <p><strong>2.</strong> Gebruik een steriel pincet om de splinter langzaam en recht omhoog te trekken.</p>
+                <p><strong>3.</strong> Reinig de plek nogmaals en laat open; zie een arts als tekenen van infectie verschijnen.</p>
+            </div>
+        </div>
+    </section>
     </section>
 </main>
 
