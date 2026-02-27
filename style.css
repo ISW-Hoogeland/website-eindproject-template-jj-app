@@ -4,38 +4,40 @@
     --text: #000000;
     --primary-red: #d32f2f;
     --primary-green: #2e7d32;
+    --primary-blue: #457b9d;
+    --accent-orange: #f39c12;
+    --accent-purple: #9b59b6;
+    --accent-cyan: #00799e;
     --gray-bg: #f4f4f4;
     --nav-bg: #ffffff;
     --border: #dddddd;
+    --border-light: #ddd;
+    --bg-light: #eee;
     --correct-bg: #d4edda;
     --correct-text: #155724;
     --incorrect-bg: #f8d7da;
     --incorrect-text: #721c24;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* --- DARK MODE --- */
-body.dark {
-    --bg: #000000;
-    --text: #ffffff;
-    --gray-bg: #1a1a1a;
-    --nav-bg: #121212;
-    --border: #333333;
-    --correct-bg: #1b4332;
-    --correct-text: #d4edda;
-    --incorrect-bg: #4c1d1f;
-    --incorrect-text: #f8d7da;
-}
-
+body.dark,
 body.dark-mode {
-    --bg: #000000;
-    --text: #ffffff;
-    --gray-bg: #1a1a1a;
-    --nav-bg: #121212;
-    --border: #333333;
+    /* slightly lighter to keep outlines visible */
+    --bg: #121212;
+    --text: #e0e0e0;
+    --gray-bg: #2a2a2a;
+    --nav-bg: #1a1a1a;
+    --border: #555555;
+    --border-light: #666;
+    --bg-light: #333333;
     --correct-bg: #1b4332;
     --correct-text: #d4edda;
     --incorrect-bg: #4c1d1f;
     --incorrect-text: #f8d7da;
+    --shadow-light: rgba(255, 255, 255, 0.1);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 body {
@@ -158,6 +160,16 @@ header {
     color: var(--text);
     font-size: 1.5rem;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.icon-label {
+    font-size: 0.65rem;
+    color: var(--text);
+    line-height: 1;
 }
 
 .top-nav {
@@ -182,6 +194,55 @@ header {
     max-width: 50px;
     object-fit: contain;
 }
+
+.btn-lang {
+    background: var(--bg-light);
+    color: var(--text);
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-weight: bold;
+    font-size: 0.85rem;
+    height: 36px;
+}
+
+.info-btn {
+    background: var(--bg-light);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    height: 36px;
+    min-width: 60px;
+}
+
+/* grouping inside the top nav for symmetry */
+.top-nav .nav-left,
+.top-nav .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* meer ruimte tussen knoppen */
+}
+
+.bottom-nav .nav-item {
+    font-family: inherit; /* zelfde als bovenste knoppen */
+    font-weight: bold;
+    font-size: 0.85rem; /* match top buttons */
+}
+
+
+/* bottom nav icon/text layout adjustments */
+.nav-icon {
+    display: block;
+    font-size: 1.2rem;
+}
+
+.nav-text {
+    font-size: 0.7rem;
+}
+
 
 .bottom-nav {
     position: fixed;
@@ -211,14 +272,20 @@ header {
 .nav-item.active { color: var(--primary-red); font-weight: bold; }
 
 .btn-top {
-    padding: 6px 12px;
+    padding: 10px 16px;
     border-radius: 4px;
     border: none;
     font-weight: bold;
     text-decoration: none;
     color: white;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     white-space: nowrap;
+    transition: transform 0.2s;
+}
+
+/* enlarge top buttons slightly when hovered */
+.top-nav .btn-top:hover {
+    transform: scale(1.1);
 }
 
 .btn-trainen { background-color: var(--primary-green); }
@@ -226,29 +293,14 @@ header {
 
 .nav-item.active { color: var(--primary-red); font-weight: bold; }
 
-:root {
-    --bg-color: #f4f7f6;
-    --card-bg: #ffffff;
-    --text-color: #333;
-    --primary-red: #e63946;
-    --primary-blue: #457b9d;
-    --accent-color: #1d3557;
-    --shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+/* Vervangen door hierboven gedefinieerde variabelen */
 
-.dark-mode {
-    --bg-color: #1a1a1a;
-    --card-bg: #2d2d2d;
-    --text-color: #f1f1f1;
-    --shadow: 0 4px 12px rgba(0,0,0,0.5);
-}
-
-* { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+* { box-sizing: border-box; font-family: Arial, sans-serif; }
 
 body { 
     margin: 0; 
-    background-color: var(--bg-color); 
-    color: var(--text-color);
+    background-color: var(--bg); 
+    color: var(--text);
     transition: all 0.3s ease;
     padding-top: 80px; /* Ruimte voor top nav */
 }
@@ -297,12 +349,12 @@ body {
 .card-victim { border-left: 8px solid var(--primary-red); }
 .card-coord { border-left: 8px solid var(--primary-blue); }
 .card-location { 
-    border-left: 8px solid #f39c12;
+    border-left: 8px solid var(--accent-orange);
     cursor: default;
 }
 .card-quiz { border-left: 8px solid var(--primary-green); }
-.card-guide { border-left: 8px solid #9b59b6; }
-.card-map { border-left: 8px solid #00799e; }
+.card-guide { border-left: 8px solid var(--accent-purple); }
+.card-map { border-left: 8px solid var(--accent-cyan); }
 
 /* Status Bar */
 .status-bar {
@@ -320,18 +372,19 @@ body {
 .quick-actions {
     display: flex;
     justify-content: space-around;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--border-light);
     padding-top: 10px;
 }
 
 .action-circle {
     border: none;
-    background: #eee;
+    background: var(--bg-light);
     width: 45px;
     height: 45px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 1.2rem;
+    color: var(--text);
 }
 
 /* Bottom Nav */
@@ -339,21 +392,22 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background: var(--card-bg);
+    background: var(--nav-bg);
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 -2px 10px var(--shadow-light);
     z-index: 100;
 }
 
 .nav-item {
     text-decoration: none;
-    color: #888;
+    color: var(--text);
     font-size: 0.8rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    opacity: 0.7;
 }
 
 .nav-item.active { color: var(--primary-blue); font-weight: bold; transform: scale(1.1); transition: transform 0.2s; }
@@ -373,15 +427,15 @@ body {
     width: 100%;
     padding: 12px 15px;
     border-radius: 10px;
-    border: 1px solid #ddd;
-    background: var(--card-bg);
-    color: var(--text-color);
+    border: 1px solid var(--border-light);
+    background: var(--bg);
+    color: var(--text);
 }
 
 .guide-grid { display: flex; flex-direction: column; gap: 10px; }
 
 .guide-card {
-    background: var(--card-bg);
+    background: var(--bg);
     border-radius: 12px;
     padding: 15px;
     box-shadow: var(--shadow);

@@ -9,16 +9,39 @@
 <body>
 
 <nav class="top-nav">
-    <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <div class="nav-left">
+        <select id="languageSelect" class="btn-lang" onchange="changeLanguage(this.value)">
+            <option value="nl">🇳🇱 Nederlands</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="es">🇪🇸 Español</option>
+        </select>
+        <a href="quiz.html" class="btn-top btn-trainen" data-i18n="train">Trainen</a>
+    </div>
     <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
-    <a href="tel:112" class="btn-top btn-112">📞 112</a>
+    <div class="nav-right">
+        <a href="tel:112" class="btn-top btn-112" data-i18n="call112">📞 112</a>
+        <button class="info-btn" onclick="showInfo()" data-i18n="info">ℹ️</button>
+    </div>
 </nav>
 
 <nav class="bottom-nav">
-    <a href="index.html" class="btn-top nav-item active"><span>🏠</span>Home</a>
-    <button class="icon-btn" onclick="toggleFlashlight()">🔦</button>
-    <button class="icon-btn" onclick="toggleDarkMode()">🌓</button>
-    <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
+    <a href="index.html" class="btn-top nav-item active">
+
+        <span class="nav-text" data-i18n="home">Home</span>
+    </a>
+    <button class="icon-btn" onclick="toggleFlashlight()">
+        <span class="nav-icon">🔦</span>
+        <span class="nav-text" data-i18n="flashlight">Zaklamp</span>
+    </button>
+    <button class="icon-btn" onclick="toggleDarkMode()">
+        <span class="nav-icon">🌓</span>
+        <span class="nav-text" data-i18n="darkmode">Donker Modus</span>
+    </button>
+    <a href="kaart.html" class="btn-top nav-item">
+        <span class="nav-text" data-i18n="aedmap">AED Kaart</span>
+    </a>
 </nav>
 
 <main class="main-content">
@@ -26,44 +49,44 @@
         <a href="slachtoffer.html" class="card card-victim">
             <span class="card-icon">🩹</span>
             <div class="card-text">
-                <h2>Slachtofferhulp</h2>
-                <p>Eerste hulp verlenen</p>
+                <h2 data-i18n="victim">Slachtofferhulp</h2>
+                <p data-i18n="victim_p">Eerste hulp verlenen</p>
             </div>
         </a>
         <a href="coördineren-hulp.html" class="card card-coord">
             <span class="card-icon">📣</span>
             <div class="card-text">
-                <h2>Coördineren</h2>
-                <p>Leid de hulpverlening</p>
+                <h2 data-i18n="coord">Coördineren</h2>
+                <p data-i18n="coord_p">Leid de hulpverlening</p>
             </div>
         </a>
         <div class="card card-location">
             <span class="card-icon">📍</span>
             <div class="card-text">
-                <h2>Mijn Locatie</h2>
-                <p id="location-status">Locatie ophalen...</p>
+                <h2 data-i18n="mylocation">Mijn Locatie</h2>
+                <p id="location-status" data-i18n="loc_fetching">Locatie ophalen...</p>
                 <div id="location-details" style="font-size: 0.9rem; margin-top: 8px; color: #666;"></div>
             </div>
         </div>
         <a href="quiz.html" class="card card-quiz">
             <span class="card-icon">❓</span>
             <div class="card-text">
-                <h2>Trainen</h2>
-                <p>Test je kennis</p>
+                <h2 data-i18n="quiz">Trainen</h2>
+                <p data-i18n="quiz_p">Test je kennis</p>
             </div>
         </a>
         <a href="ehbo-gids.html" class="card card-guide">
             <span class="card-icon">📖</span>
             <div class="card-text">
-                <h2>EHBO Gids</h2>
-                <p>Hulpverlening stap voor stap</p>
+                <h2 data-i18n="guide">EHBO Gids</h2>
+                <p data-i18n="guide_p">Hulpverlening stap voor stap</p>
             </div>
         </a>
         <a href="kaart.html" class="card card-map">
             <span class="card-icon">🗺️</span>
             <div class="card-text">
-                <h2>AED Kaart</h2>
-                <p>Vind een AED in de buurt</p>
+                <h2 data-i18n="aedmap">AED Kaart</h2>
+                <p data-i18n="aed_p">Vind een AED in de buurt</p>
             </div>
         </a>
     </section>
@@ -82,6 +105,153 @@
         }
     }
     
+    // Huidige taal en vertalingen
+    let currentLang = localStorage.getItem('language') || 'nl';
+
+    const translations = {
+        nl: {
+            train: 'Trainen',
+            call112: '📞 112',
+            home: 'Home',
+            flashlight: 'Zaklamp',
+            darkmode: 'Donker',
+            aedmap: 'AED Kaart',
+            victim: 'Slachtofferhulp',
+            victim_p: 'Eerste hulp verlenen',
+            coord: 'Coördineren',
+            coord_p: 'Leid de hulpverlening',
+            mylocation: 'Mijn Locatie',
+            loc_fetching: 'Locatie ophalen...',
+            loc_found: '✓ Locatie gevonden',
+            loc_unavailable: '✗ Locatie niet beschikbaar',
+            loc_not_supported: 'Geolocation niet ondersteund',
+            loc_permission: 'Geef toestemming voor locatie toegang',
+            quiz: 'Trainen',
+            quiz_p: 'Test je kennis',
+            guide: 'EHBO Gids',
+            guide_p: 'Hulpverlening stap voor stap',
+            aed_p: 'Vind een AED in de buurt',
+            infoTitle: 'Noodhulp App — versie 1.0',
+            infoBody: 'Gebruik deze app voor EHBO snelhulp en navigatie.',
+            info: 'ℹ️'
+        },
+        en: {
+            train: 'Training',
+            call112: '📞 112',
+            home: 'Home',
+            flashlight: 'Flashlight',
+            darkmode: 'Dark mode',
+            aedmap: 'AED Map',
+            victim: 'Victim Aid',
+            victim_p: 'Provide first aid',
+            coord: 'Coordinate',
+            coord_p: 'Lead the response',
+            mylocation: 'My Location',
+            loc_fetching: 'Getting location...',
+            loc_found: '✓ Location found',
+            loc_unavailable: '✗ Location unavailable',
+            loc_not_supported: 'Geolocation not supported',
+            loc_permission: 'Allow location access',
+            quiz: 'Train',
+            quiz_p: 'Test your knowledge',
+            guide: 'First Aid Guide',
+            guide_p: 'Step-by-step assistance',
+            aed_p: 'Find an AED nearby',
+            infoTitle: 'Emergency App — v1.0',
+            infoBody: 'Use this app for quick first aid and navigation.',
+            info: 'ℹ️'
+        },
+        de: {
+            train: 'Training',
+            call112: '📞 112',
+            home: 'Start',
+            flashlight: 'Taschenlampe',
+            darkmode: 'Nachtmodus',
+            aedmap: 'AED Karte',
+            victim: 'Opferhilfe',
+            victim_p: 'Erste Hilfe leisten',
+            coord: 'Koordinieren',
+            coord_p: 'Leiten der Hilfeleistung',
+            mylocation: 'Mein Standort',
+            loc_fetching: 'Standort wordt opgehaald...',
+            loc_found: '✓ Standort gefunden',
+            loc_unavailable: '✗ Standort nicht verfügbar',
+            loc_not_supported: 'Geolocation nicht unterstützt',
+            loc_permission: 'Erlauben Sie den Standortzugriff',
+            quiz: 'Üben',
+            quiz_p: 'Teste dein Wissen',
+            guide: 'Erste-Hilfe Anleitung',
+            guide_p: 'Schritt für Schritt Hilfe',
+            aed_p: 'Finde ein AED in der Nähe',
+            infoTitle: 'Notfall-App — v1.0',
+            infoBody: 'Verwenden Sie diese App für Erste Hilfe und Navigation.',
+            info: 'ℹ️'
+        },
+        fr: {
+            train: 'Entraînement',
+            call112: '📞 112',
+            home: 'Accueil',
+            flashlight: 'Lampe de poche',
+            darkmode: 'Mode sombre',
+            aedmap: 'Carte AED',
+            victim: 'Aide victime',
+            victim_p: 'Fournir les premiers secours',
+            coord: 'Coordonner',
+            coord_p: 'Diriger l’intervention',
+            mylocation: 'Ma position',
+            loc_fetching: 'Récupération de la position...',
+            loc_found: '✓ Position trouvée',
+            loc_unavailable: '✗ Position non disponible',
+            loc_not_supported: 'Géolocalisation non prise en charge',
+            loc_permission: 'Autorisez l’accès à la position',
+            quiz: 'S’entraîner',
+            quiz_p: 'Testez vos connaissances',
+            guide: 'Guide de premiers secours',
+            guide_p: 'Assistance étape par étape',
+            aed_p: 'Trouvez un DAE à proximité',
+            infoTitle: 'Application d’urgence — v1.0',
+            infoBody: 'Utilisez cette application pour les premiers secours et la navigation.',
+            info: 'ℹ️'
+        },
+        es: {
+            train: 'Entrenamiento',
+            call112: '📞 112',
+            home: 'Inicio',
+            flashlight: 'Linterna',
+            darkmode: 'Modo oscuro',
+            aedmap: 'Mapa AED',
+            victim: 'Ayuda a la víctima',
+            victim_p: 'Proporcionar primeros auxilios',
+            coord: 'Coordinar',
+            coord_p: 'Dirigir la respuesta',
+            mylocation: 'Mi ubicación',
+            loc_fetching: 'Obteniendo ubicación...',
+            loc_found: '✓ Ubicación encontrada',
+            loc_unavailable: '✗ Ubicación no disponible',
+            loc_not_supported: 'Geolocalización no compatible',
+            loc_permission: 'Permita el acceso a la ubicación',
+            quiz: 'Practicar',
+            quiz_p: 'Pon a prueba tus conocimientos',
+            guide: 'Guía de primeros auxilios',
+            guide_p: 'Asistencia paso a paso',
+            aed_p: 'Encuentra un DEA cercano',
+            infoTitle: 'App de emergencia — v1.0',
+            infoBody: 'Usa esta app para primeros auxilios y navegación.',
+            info: 'ℹ️'
+        }
+    };
+
+    function applyTranslations(lang) {
+        const map = translations[lang] || translations['nl'];
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (map[key]) {
+                el.textContent = map[key];
+            }
+        });
+    }
+
     function requestLocationPermission() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -90,8 +260,8 @@
                     const lon = position.coords.longitude;
                     
                     // Update de locatie informatie
-                    document.getElementById('location-status').textContent = '✓ Locatie gevonden';
-                    document.getElementById('location-details').innerHTML = 'Adres ophalen...';
+                    document.getElementById('location-status').textContent = (translations[currentLang] && translations[currentLang]['loc_found']) ? translations[currentLang]['loc_found'] : '✓ Locatie gevonden';
+                    document.getElementById('location-details').innerHTML = (translations[currentLang] && translations[currentLang]['loc_fetching']) ? translations[currentLang]['loc_fetching'] : 'Adres ophalen...';
                     
                     // Haal adres informatie op
                     const address = await getReverseGeocode(lat, lon);
@@ -116,12 +286,12 @@
                     }
                 },
                 function(error) {
-                    document.getElementById('location-status').textContent = '✗ Locatie niet beschikbaar';
-                    document.getElementById('location-details').textContent = 'Geef toestemming voor locatie toegang';
+                    document.getElementById('location-status').textContent = (translations[currentLang] && translations[currentLang]['loc_unavailable']) ? translations[currentLang]['loc_unavailable'] : '✗ Locatie niet beschikbaar';
+                    document.getElementById('location-details').textContent = (translations[currentLang] && translations[currentLang]['loc_permission']) ? translations[currentLang]['loc_permission'] : 'Geef toestemming voor locatie toegang';
                 }
             );
         } else {
-            document.getElementById('location-status').textContent = 'Geolocation niet ondersteund';
+                document.getElementById('location-status').textContent = (translations[currentLang] && translations[currentLang]['loc_not_supported']) ? translations[currentLang]['loc_not_supported'] : 'Geolocation niet ondersteund';
         }
     }
     
@@ -137,7 +307,27 @@
     if (localStorage.getItem('flashlight') === 'true') {
         document.body.style.filter = 'invert(1)';
     }
-    
+
+    // Herstel taal voorkeur en pas vertalingen toe
+    const savedLang = localStorage.getItem('language') || currentLang;
+    currentLang = savedLang;
+    applyTranslations(currentLang);
+    window.addEventListener('load', function() {
+        const langSelect = document.getElementById('languageSelect');
+        if (langSelect) langSelect.value = currentLang;
+    });
+
+    function changeLanguage(code) {
+        localStorage.setItem('language', code);
+        currentLang = code;
+        applyTranslations(code);
+    }
+
+    function showInfo() {
+        const map = translations[currentLang] || translations['nl'];
+        alert(map.infoTitle + "\n" + map.infoBody);
+    }
+
     function toggleDarkMode() { 
         document.body.classList.toggle("dark-mode");
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
