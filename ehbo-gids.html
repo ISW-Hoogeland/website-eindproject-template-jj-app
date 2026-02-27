@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>EHBO Gids - Noodhulp App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="guide-page">
+
+<nav class="top-nav">
+    <div class="nav-left">
+        <select id="languageSelect" class="btn-lang" onchange="changeLanguage(this.value)">
+            <option value="nl">🇳🇱 Nederlands</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="es">🇪🇸 Español</option>
+        </select>
+        <a href="quiz.html" class="btn-top btn-trainen" data-i18n="train">Trainen</a>
+    </div>
+    <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
+    <div class="nav-right">
+        <a href="tel:112" class="btn-top btn-112" data-i18n="call112">📞 112</a>
+        <button class="info-btn" onclick="showInfo()" data-i18n="info">ℹ️</button>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="search-container">
+        <input type="text" placeholder="Wat is er aan de hand? (bijv. 'brandwond')" class="search-bar" data-i18n="search_placeholder">
+    </div>
+
+    <section class="guide-grid">
+        <div class="guide-card urgent" onclick="toggleDetails('cpr')">
+            <div class="card-header">
+                <span class="guide-icon">🫀</span>
+                <h3>Reanimatie & AED</h3>
+            </div>
+            <div id="cpr" class="guide-details">
+                <p><strong>1. Controleer bewustzijn:</strong> Schud aan schouders, roep luid.</p>
+                <p><strong>2. Ademhaling:</strong> Kijk, luister, voel (max 10 sec).</p>
+                <p><strong>3. Bel 112:</strong> Zet de telefoon op de luidspreker.</p>
+                
+                <p><strong>4. Borstcompressies:</strong> 30 keer in hoog tempo (100-120 bpm).</p>
+                <p><strong>5. Beademing:</strong> 2 keer kort blazen (indien getraind).</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('choking')">
+            <div class="card-header">
+                <span class="guide-icon">🥨</span>
+                <h3>Verslikking</h3>
+            </div>
+            <div id="choking" class="guide-details">
+                <p><strong>1. Moedig aan tot hoesten.</strong></p>
+                <p><strong>2. 5 slagen tussen schouderbladen:</strong> Sla met de hiel van je hand.</p>
+                
+
+[Image of the Heimlich maneuver steps]
+
+                <p><strong>3. Heimlich greep:</strong> 5 keer krachtig trekken boven de navel.</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('unconscious')">
+            <div class="card-header">
+                <span class="guide-icon">😴</span>
+                <h3>Bewusteloosheid</h3>
+            </div>
+            <div id="unconscious" class="guide-details">
+                <p>Ademt het slachtoffer nog wel? Leg deze in de <strong>Stabiele Zijligging</strong>.</p>
+                
+
+[Image of the recovery position]
+
+                <p>Controleer elke minuut de ademhaling tot de ambulance er is.</p>
+            </div>
+        </div>
+
+        <div class="guide-card" onclick="toggleDetails('burns')">
+            <div class="card-header">
+                <span class="guide-icon">🔥</span>
+                <h3>Brandwonden</h3>
+            </div>
+            <div id="burns" class="guide-details">
+                <p><strong>Eerst water, de rest komt later.</strong></p>
+                <p>Minimaal 10-20 minuten koelen met lauw, zacht stromend kraanwater.</p>
+                <p>Verwijder kleding alleen als deze niet aan de wond kleeft.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div class="action-bar">
+    <button class="icon-btn" onclick="alert('Info over de app')">ⓘ</button>
+    <div class="location-box">
+        <i>📍</i>
+        Uw locatie<br><strong>Professorslaan 20</strong>
+    </div>
+    <button class="icon-btn" onclick="toggleFlashlight()">🔦
+        <span class="icon-label">Zaklamp</span>
+    </button>
+    <button class="icon-btn" onclick="toggleDarkMode()">🌓
+        <span class="icon-label">Dark mode</span>
+    </button>
+</div>
+
+<nav class="bottom-nav">
+    <a href="index.html" class="btn-top nav-item">
+        <span class="nav-text" data-i18n="home">Home</span>
+    </a>
+    <button class="icon-btn" onclick="toggleFlashlight()">
+        <span class="nav-icon">🔦</span>
+        <span class="nav-text" data-i18n="flashlight">Zaklamp</span>
+    </button>
+    <button class="icon-btn" onclick="toggleDarkMode()">
+        <span class="nav-icon">🌓</span>
+        <span class="nav-text" data-i18n="darkmode">Dark mode</span>
+    </button>
+    <a href="kaart.html" class="btn-top nav-item">
+        <span class="nav-text" data-i18n="aedmap">AED Kaart</span>
+    </a>
+</nav>
+
+
+<script>
+    function toggleDetails(id) {
+        const detail = document.getElementById(id);
+        const allDetails = document.querySelectorAll('.guide-details');
+        
+        // Sluit andere geopende items (optioneel, voor focus)
+        allDetails.forEach(item => {
+            if(item.id !== id) item.style.display = 'none';
+        });
+
+        // Toggle de geselecteerde
+        if (detail.style.display === "block") {
+            detail.style.display = "none";
+        } else {
+            detail.style.display = "block";
+        }
+    }
+
+    let flashlightStream = null;
+    let flashlightTrack = null;
+
+    // Herstel dark mode instellingen bij page load
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    if (localStorage.getItem('flashlight') === 'true') {
+        document.body.style.filter = 'invert(1)';
+    }
+
+    // Taal en vertalingen
+    let currentLang = localStorage.getItem('language') || 'nl';
+    const translations = {
+        nl:{train:'Trainen',call112:'📞 112',home:'Home',flashlight:'Zaklamp',darkmode:'Donker',aedmap:'AED Kaart',infoTitle:'Noodhulp App — versie 1.0',infoBody:'Gebruik deze app voor EHBO snelhulp en navigatie.',search_placeholder:'Wat is er aan de hand? (bijv. \'brandwond\')'},
+        en:{train:'Training',call112:'📞 112',home:'Home',flashlight:'Flashlight',darkmode:'Dark mode',aedmap:'AED Map',infoTitle:'Emergency App — v1.0',infoBody:'Use this app for quick first aid and navigation.',search_placeholder:'What is happening? (e.g. \"burn\")'},
+        de:{train:'Training',call112:'📞 112',home:'Start',flashlight:'Taschenlampe',darkmode:'Nachtmodus',aedmap:'AED Karte',infoTitle:'Notfall-App — v1.0',infoBody:'Verwenden Sie diese App für Erste Hilfe und Navigation.',search_placeholder:'Was ist los? (z. B. \"Brandwunde\")'},
+        fr:{train:'Entraînement',call112:'📞 112',home:'Accueil',flashlight:'Lampe de poche',darkmode:'Mode sombre',aedmap:'Carte AED',infoTitle:'Application d’urgence — v1.0',infoBody:'Utilisez cette application pour les premiers secours et la navigation.',search_placeholder:'Que se passe-t-il ? (p. ex. \"brûlure\")'},
+        es:{train:'Entrenamiento',call112:'📞 112',home:'Inicio',flashlight:'Linterna',darkmode:'Modo oscuro',aedmap:'Mapa AED',infoTitle:'App de emergencia — v1.0',infoBody:'Usa esta app para primeros auxilios y navegación.',search_placeholder:'¿Qué está pasando? (p.ej. \"quemadura\")'}
+    };
+    function applyTranslations(lang){
+        const map=translations[lang]||translations['nl'];
+        document.documentElement.lang=lang;
+        document.querySelectorAll('[data-i18n]').forEach(el=>{
+            const key=el.getAttribute('data-i18n');
+            if(map[key]) {
+                if(el.tagName === 'INPUT' && 'placeholder' in el) {
+                    el.placeholder = map[key];
+                } else {
+                    el.textContent = map[key];
+                }
+            }
+        });
+    }
+    const savedLang = localStorage.getItem('language') || currentLang;
+    currentLang = savedLang;
+    applyTranslations(currentLang);
+    window.addEventListener('load', function(){
+        const langSelect=document.getElementById('languageSelect');
+        if(langSelect) langSelect.value=currentLang;
+    });
+    function changeLanguage(code){
+        localStorage.setItem('language', code);
+        currentLang = code;
+        applyTranslations(code);
+    }
+    function showInfo(){
+        const map = translations[currentLang] || translations['nl'];
+        alert(map.infoTitle+"\n"+map.infoBody);
+    }
+
+    function toggleDarkMode() { 
+        document.body.classList.toggle("dark-mode");
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    async function toggleFlashlight() { 
+        try {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Zaklamp niet ondersteund op deze browser.');
+                return;
+            }
+
+            if (flashlightTrack) {
+                try {
+                    await flashlightTrack.applyConstraints({ advanced: [{ torch: false }] });
+                    flashlightTrack.stop();
+                    flashlightStream.getTracks().forEach(track => track.stop());
+                    flashlightTrack = null;
+                    flashlightStream = null;
+                } catch (e) {
+                    console.error('Error turning off flashlight:', e);
+                }
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        advanced: [{ torch: true }]
+                    }
+                });
+                flashlightStream = stream;
+                flashlightTrack = stream.getVideoTracks()[0];
+            } catch (e) {
+                console.log('Trying alternative method for flashlight...');
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                const track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+                if (capabilities.torch) {
+                    try {
+                        await track.applyConstraints({ advanced: [{ torch: true }] });
+                        flashlightStream = stream;
+                        flashlightTrack = track;
+                    } catch (constraintErr) {
+                        track.stop();
+                        stream.getTracks().forEach(t => t.stop());
+                        alert('Zaklamp kan niet worden ingeschakeld op dit apparaat.');
+                        return;
+                    }
+                } else {
+                    track.stop();
+                    stream.getTracks().forEach(t => t.stop());
+                    alert('Zaklamp niet beschikbaar op dit apparaat.');
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('Zaklamp fout:', error);
+            if (error.name === 'NotAllowedError') {
+                alert('Zaklamp toestemming geweigerd. Zet dit in je instellingen aan.');
+            } else if (error.name === 'NotFoundError') {
+                alert('Camera niet gevonden op dit apparaat.');
+            } else {
+                alert('Kan de zaklamp niet inschakelen. Mogelijke oorzaken: geen camera, geen toestemming, of onvoldoende Android versie (minimaal Android 5).');
+            }
+        }
+    }
+</script>
+</body>
+</html>

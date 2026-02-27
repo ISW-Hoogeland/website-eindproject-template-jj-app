@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Laden...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="loading.css">
+</head>
+<body>
+    <div class="loading-container">
+        <div class="logo">
+            <img src="images/logo.png" alt="Logo">
+        </div>
+        
+        <h1>Noodhulp App</h1>
+        
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <p class="loading-text">Laden...</p>
+    </div>
+
+    <script>
+        // Simuleer laadprogress
+        let progress = 0;
+        const progressFill = document.querySelector('.progress-fill');
+        const progressBar = document.querySelector('.progress-bar');
+
+        const interval = setInterval(() => {
+            progress += Math.random() * 30;
+            if (progress > 100) progress = 100;
+            
+            progressFill.style.width = progress + '%';
+
+            if (progress === 100) {
+                clearInterval(interval);
+                // Navigeer naar index.html na 1 seconde
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }
+        }, 300);
+    </script>
+</body>
+</html>
