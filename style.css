@@ -26,6 +26,18 @@ body.dark {
     --incorrect-text: #f8d7da;
 }
 
+body.dark-mode {
+    --bg: #000000;
+    --text: #ffffff;
+    --gray-bg: #1a1a1a;
+    --nav-bg: #121212;
+    --border: #333333;
+    --correct-bg: #1b4332;
+    --correct-text: #d4edda;
+    --incorrect-bg: #4c1d1f;
+    --incorrect-text: #f8d7da;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -36,6 +48,7 @@ body {
     min-height: 100vh;
     padding-top: 140px; /* Ruimte voor top navigatie */
     padding-bottom: 75px; /* Ruimte voor bottom navigatie */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* --- HEADER --- */
@@ -160,6 +173,14 @@ header {
     z-index: 100;
     gap: 10px;
     padding: 0 10px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.app-logo {
+    height: 50px;
+    width: auto;
+    max-width: 50px;
+    object-fit: contain;
 }
 
 .bottom-nav {
@@ -173,6 +194,7 @@ header {
     justify-content: space-around;
     align-items: center;
     z-index: 100;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .nav-item {
@@ -280,6 +302,7 @@ body {
 }
 .card-quiz { border-left: 8px solid var(--primary-green); }
 .card-guide { border-left: 8px solid #9b59b6; }
+.card-map { border-left: 8px solid #00799e; }
 
 /* Status Bar */
 .status-bar {

@@ -10,6 +10,7 @@
 
 <nav class="top-nav">
     <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
     <a href="tel:112" class="btn-top btn-112">📞 112</a>
 </nav>
 
@@ -58,11 +59,14 @@
                 <p>Hulpverlening stap voor stap</p>
             </div>
         </a>
+        <a href="kaart.html" class="card card-map">
+            <span class="card-icon">🗺️</span>
+            <div class="card-text">
+                <h2>AED Kaart</h2>
+                <p>Vind een AED in de buurt</p>
+            </div>
+        </a>
     </section>
-
-    
-        
-    </div>
 </main>
 
 <script>
@@ -126,27 +130,97 @@
         requestLocationPermission();
     });
     
-    function toggleDarkMode() { 
-        document.body.classList.toggle("dark-mode"); 
+    // Herstel dark mode instellingen
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
     }
+    if (localStorage.getItem('flashlight') === 'true') {
+        document.body.style.filter = 'invert(1)';
+    }
+    
+    function toggleDarkMode() { 
+        document.body.classList.toggle("dark-mode");
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    // Zaklamp variabele
+    let flashlightStream = null;
+    let flashlightTrack = null;
+    
     async function toggleFlashlight() { 
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            alert('Zaklamp niet ondersteund op deze browser.');
-            return;
-        }
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-            const track = stream.getVideoTracks()[0];
-            const cap = track.getCapabilities();
-            if (cap.torch) {
-                const current = track.getSettings().torch || false;
-                await track.applyConstraints({ advanced: [{ torch: !current }] });
-            } else {
-                alert('Zaklamp niet beschikbaar op dit apparaat.');
+            // Check browser support
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Zaklamp niet ondersteund op deze browser.');
+                return;
             }
-        } catch (e) {
-            console.log('flashlight error', e);
-            alert('Kan de zaklamp niet inschakelen. Mogelijk ondersteunt je browser het niet.');
+
+            // Als zaklamp al aan staat, zet uit
+            if (flashlightTrack) {
+                try {
+                    await flashlightTrack.applyConstraints({ advanced: [{ torch: false }] });
+                    flashlightTrack.stop();
+                    flashlightStream.getTracks().forEach(track => track.stop());
+                    flashlightTrack = null;
+                    flashlightStream = null;
+                } catch (e) {
+                    console.error('Error turning off flashlight:', e);
+                }
+                return;
+            }
+
+            // Zaklamp aan zetten
+            try {
+                // Try with explicit torch constraint
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        advanced: [{ torch: true }]
+                    }
+                });
+                
+                flashlightStream = stream;
+                flashlightTrack = stream.getVideoTracks()[0];
+                
+            } catch (e) {
+                // Fallback: probeer zonder torch constraint, dan apply constraint
+                console.log('Trying alternative method for flashlight...');
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                
+                const track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+                
+                if (capabilities.torch) {
+                    try {
+                        await track.applyConstraints({ advanced: [{ torch: true }] });
+                        flashlightStream = stream;
+                        flashlightTrack = track;
+                    } catch (constraintErr) {
+                        track.stop();
+                        stream.getTracks().forEach(t => t.stop());
+                        alert('Zaklamp kan niet worden ingeschakeld op dit apparaat.');
+                        return;
+                    }
+                } else {
+                    track.stop();
+                    stream.getTracks().forEach(t => t.stop());
+                    alert('Zaklamp niet beschikbaar op dit apparaat.');
+                    return;
+                }
+            }
+            
+        } catch (error) {
+            console.error('Zaklamp fout:', error);
+            // Probeer graceful fallback
+            if (error.name === 'NotAllowedError') {
+                alert('Zaklamp toestemming geweigerd. Zet dit in je instellingen aan.');
+            } else if (error.name === 'NotFoundError') {
+                alert('Camera niet gevonden op dit apparaat.');
+            } else {
+                alert('Kan de zaklamp niet inschakelen. Mogelijke oorzaken: geen camera, geen toestemming, of onvoldoende Android versie (minimaal Android 5).');
+            }
         }
     }
 </script>
