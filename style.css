@@ -279,6 +279,7 @@ body {
     cursor: default;
 }
 .card-quiz { border-left: 8px solid var(--primary-green); }
+.card-guide { border-left: 8px solid #9b59b6; }
 
 /* Status Bar */
 .status-bar {
