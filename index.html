@@ -13,9 +13,6 @@
         <select id="languageSelect" class="btn-lang" onchange="changeLanguage(this.value)">
             <option value="nl">🇳🇱</option>
             <option value="en">🇬🇧</option>
-            <option value="de">🇩🇪</option>
-            <option value="fr">🇫🇷</option>
-            <option value="es">🇪🇸</option>
         </select>
         <a href="quiz.html" class="btn-top btn-trainen" data-i18n="train">Trainen</a>
     </div>
@@ -27,17 +24,53 @@
 </nav>
 
 <nav class="bottom-nav">
-    <a href="index.html" class="btn-top nav-item"><span>🏠</span>Home</a>
-    <button class="icon-btn" onclick="toggleFlashlight()">
+    <a href="index.html" class="btn-top nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">Home</span>
+    </a>
+
+    <button class="icon-btn nav-item" onclick="toggleFlashlight()">
         <span class="nav-icon">🔦</span>
         <span class="nav-text" data-i18n="flashlight">Zaklamp</span>
     </button>
-    <button class="icon-btn" onclick="toggleDarkMode()">
+
+    <a href="kaart.html" class="btn-top nav-item">
+        <span class="nav-icon">🗺️</span>
+        <span class="nav-text" data-i18n="aedmap">AED Kaart</span>
+    </a>
+
+    <button class="icon-btn nav-item" onclick="toggleDarkMode()">
         <span class="nav-icon">🌓</span>
-        <span class="nav-text" data-i18n="darkmode">Dark mode</span>
+        <span class="nav-text" data-i18n="darkmode">Donker</span>
     </button>
-    <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
+
+    <button class="btn-top nav-item" onclick="openProfilePanel()">
+        <span class="nav-icon">👤</span>
+        <span class="nav-text" data-i18n="mydata">Mijn Gegevens</span>    
+    </button>
 </nav>
+
+<!-- profielpaneel -->
+<div id="profile-panel" class="profile-panel" aria-hidden="true">
+    <div class="panel-header">
+        <h2 data-i18n="mydata">Mijn Gegevens</h2>
+        <button class="close-btn" onclick="closeProfilePanel()" aria-label="Sluiten">✖️</button>
+    </div>
+    <div class="panel-body">
+        <label data-i18n="name">Naam
+            <input id="profile-name" type="text">
+        </label>
+        <label data-i18n="address">Adres
+            <input id="profile-address" type="text">
+        </label>
+        <label data-i18n="allergies">Allergieën
+            <input id="profile-allergies" type="text">
+        </label>
+        <label data-i18n="blood">Bloedgroep
+            <input id="profile-blood" type="text">
+        </label>
+    </div>
+</div>
 
 <main class="main-content">
     <section class="hero-actions">
@@ -104,137 +137,78 @@
     let currentLang = localStorage.getItem('language') || 'nl';
 
     const translations = {
-        nl: {
-            train: 'Trainen',
-            call112: '📞 112',
-            home: 'Home',
-            flashlight: 'Zaklamp',
-            darkmode: 'Donker',
-            aedmap: 'AED Kaart',
-            victim: 'Slachtofferhulp',
-            victim_p: 'Eerste hulp verlenen',
-            coord: 'Coördineren',
-            coord_p: 'Leid de hulpverlening',
-            mylocation: 'Mijn Locatie',
-            loc_fetching: 'Locatie ophalen...',
-            loc_found: '✓ Locatie gevonden',
-            loc_unavailable: '✗ Locatie niet beschikbaar',
-            loc_not_supported: 'Geolocation niet ondersteund',
-            loc_permission: 'Geef toestemming voor locatie toegang',
-            quiz: 'Trainen',
-            quiz_p: 'Test je kennis',
-            guide: 'EHBO Gids',
-            guide_p: 'Hulpverlening stap voor stap',
-            aed_p: 'Vind een AED in de buurt',
-            infoTitle: 'Noodhulp App — versie 1.0',
-            infoBody: 'Gebruik deze app voor EHBO snelhulp en navigatie.',
-            info: 'ℹ️'
-        },
-        en: {
-            train: 'Training',
-            call112: '📞 112',
-            home: 'Home',
-            flashlight: 'Flashlight',
-            darkmode: 'Dark mode',
-            aedmap: 'AED Map',
-            victim: 'Victim Aid',
-            victim_p: 'Provide first aid',
-            coord: 'Coordinate',
-            coord_p: 'Lead the response',
-            mylocation: 'My Location',
-            loc_fetching: 'Getting location...',
-            loc_found: '✓ Location found',
-            loc_unavailable: '✗ Location unavailable',
-            loc_not_supported: 'Geolocation not supported',
-            loc_permission: 'Allow location access',
-            quiz: 'Train',
-            quiz_p: 'Test your knowledge',
-            guide: 'First Aid Guide',
-            guide_p: 'Step-by-step assistance',
-            aed_p: 'Find an AED nearby',
-            infoTitle: 'Emergency App — v1.0',
-            infoBody: 'Use this app for quick first aid and navigation.',
-            info: 'ℹ️'
-        },
-        de: {
-            train: 'Training',
-            call112: '📞 112',
-            home: 'Start',
-            flashlight: 'Taschenlampe',
-            darkmode: 'Nachtmodus',
-            aedmap: 'AED Karte',
-            victim: 'Opferhilfe',
-            victim_p: 'Erste Hilfe leisten',
-            coord: 'Koordinieren',
-            coord_p: 'Leiten der Hilfeleistung',
-            mylocation: 'Mein Standort',
-            loc_fetching: 'Standort wordt opgehaald...',
-            loc_found: '✓ Standort gefunden',
-            loc_unavailable: '✗ Standort nicht verfügbar',
-            loc_not_supported: 'Geolocation nicht unterstützt',
-            loc_permission: 'Erlauben Sie den Standortzugriff',
-            quiz: 'Üben',
-            quiz_p: 'Teste dein Wissen',
-            guide: 'Erste-Hilfe Anleitung',
-            guide_p: 'Schritt für Schritt Hilfe',
-            aed_p: 'Finde ein AED in der Nähe',
-            infoTitle: 'Notfall-App — v1.0',
-            infoBody: 'Verwenden Sie diese App für Erste Hilfe und Navigation.',
-            info: 'ℹ️'
-        },
-        fr: {
-            train: 'Entraînement',
-            call112: '📞 112',
-            home: 'Accueil',
-            flashlight: 'Lampe de poche',
-            darkmode: 'Mode sombre',
-            aedmap: 'Carte AED',
-            victim: 'Aide victime',
-            victim_p: 'Fournir les premiers secours',
-            coord: 'Coordonner',
-            coord_p: 'Diriger l’intervention',
-            mylocation: 'Ma position',
-            loc_fetching: 'Récupération de la position...',
-            loc_found: '✓ Position trouvée',
-            loc_unavailable: '✗ Position non disponible',
-            loc_not_supported: 'Géolocalisation non prise en charge',
-            loc_permission: 'Autorisez l’accès à la position',
-            quiz: 'S’entraîner',
-            quiz_p: 'Testez vos connaissances',
-            guide: 'Guide de premiers secours',
-            guide_p: 'Assistance étape par étape',
-            aed_p: 'Trouvez un DAE à proximité',
-            infoTitle: 'Application d’urgence — v1.0',
-            infoBody: 'Utilisez cette application pour les premiers secours et la navigation.',
-            info: 'ℹ️'
-        },
-        es: {
-            train: 'Entrenamiento',
-            call112: '📞 112',
-            home: 'Inicio',
-            flashlight: 'Linterna',
-            darkmode: 'Modo oscuro',
-            aedmap: 'Mapa AED',
-            victim: 'Ayuda a la víctima',
-            victim_p: 'Proporcionar primeros auxilios',
-            coord: 'Coordinar',
-            coord_p: 'Dirigir la respuesta',
-            mylocation: 'Mi ubicación',
-            loc_fetching: 'Obteniendo ubicación...',
-            loc_found: '✓ Ubicación encontrada',
-            loc_unavailable: '✗ Ubicación no disponible',
-            loc_not_supported: 'Geolocalización no compatible',
-            loc_permission: 'Permita el acceso a la ubicación',
-            quiz: 'Practicar',
-            quiz_p: 'Pon a prueba tus conocimientos',
-            guide: 'Guía de primeros auxilios',
-            guide_p: 'Asistencia paso a paso',
-            aed_p: 'Encuentra un DEA cercano',
-            infoTitle: 'App de emergencia — v1.0',
-            infoBody: 'Usa esta app para primeros auxilios y navegación.',
-            info: 'ℹ️'
-        }
-    };
+    nl: {
+        train: 'Trainen',
+        call112: '📞 112',
+        home: 'Home',
+        flashlight: 'Zaklamp',
+        darkmode: 'Donker',
+        aedmap: 'AED Kaart',
+        victim: 'Slachtofferhulp',
+        victim_p: 'Eerste hulp verlenen',
+        coord: 'Coördineren',
+        coord_p: 'Leid de hulpverlening',
+        mylocation: 'Mijn Locatie',
+        loc_fetching: 'Locatie ophalen...',
+        loc_found: '✓ Locatie gevonden',
+        loc_unavailable: '✗ Locatie niet beschikbaar',
+        loc_not_supported: 'Geolocation niet ondersteund',
+        loc_permission: 'Geef toestemming voor locatie toegang',
+        quiz: 'Trainen',
+        quiz_p: 'Test je kennis',
+        guide: 'EHBO Gids',
+        guide_p: 'Hulpverlening stap voor stap',
+        aed_p: 'Vind een AED in de buurt',
+
+        /* NIEUW */
+        mydata: 'Mijn Gegevens',
+        name: 'Naam',
+        address: 'Adres',
+        allergies: 'Allergieën',
+        blood: 'Bloedgroep',
+        close: 'Sluiten',
+
+        infoTitle: 'Noodhulp App — versie 1.2.14',
+        infoBody: 'Update 1.2.14\n\nToegevoegd:\n- Talenfunctie (Nederlands & Engels)\n\nVerbeteringen:\n- Snellere laadtijden\n- Betere navigatie\n\nBugfixes:\n- Kleine stabiliteitsverbeteringen',
+        info: 'ℹ️'
+    },
+
+    en: {
+        train: 'Training',
+        call112: '📞 112',
+        home: 'Home',
+        flashlight: 'Flashlight',
+        darkmode: 'Dark mode',
+        aedmap: 'AED Map',
+        victim: 'Victim Aid',
+        victim_p: 'Provide first aid',
+        coord: 'Coordinate',
+        coord_p: 'Lead the response',
+        mylocation: 'My Location',
+        loc_fetching: 'Getting location...',
+        loc_found: '✓ Location found',
+        loc_unavailable: '✗ Location unavailable',
+        loc_not_supported: 'Geolocation not supported',
+        loc_permission: 'Allow location access',
+        quiz: 'Train',
+        quiz_p: 'Test your knowledge',
+        guide: 'First Aid Guide',
+        guide_p: 'Step-by-step assistance',
+        aed_p: 'Find an AED nearby',
+
+        /* NIEUW */
+        mydata: 'My Information',
+        name: 'Name',
+        address: 'Address',
+        allergies: 'Allergies',
+        blood: 'Blood Type',
+        close: 'Close',
+
+        infoTitle: 'Emergency App — v1.2.14',
+        infoBody: 'Update 1.2.14\n\nAdded:\n- Language support (Dutch & English)\n\nImprovements:\n- Faster loading\n- Improved navigation\n\nBug fixes:\n- Minor stability improvements',
+        info: 'ℹ️'
+    }
+};
 
     function applyTranslations(lang) {
         const map = translations[lang] || translations['nl'];
@@ -322,6 +296,41 @@
         const map = translations[currentLang] || translations['nl'];
         alert(map.infoTitle + "\n" + map.infoBody);
     }
+
+    // --- profiel panel scripts ---
+    function openProfilePanel() {
+        document.getElementById('profile-panel').classList.add('open');
+    }
+
+    function closeProfilePanel() {
+        document.getElementById('profile-panel').classList.remove('open');
+    }
+
+    function loadProfile() {
+        const data = JSON.parse(localStorage.getItem('profile') || '{}');
+        document.getElementById('profile-name').value = data.name || '';
+        document.getElementById('profile-address').value = data.address || '';
+        document.getElementById('profile-allergies').value = data.allergies || '';
+        document.getElementById('profile-blood').value = data.blood || '';
+    }
+
+    function saveProfile() {
+        const data = {
+            name: document.getElementById('profile-name').value,
+            address: document.getElementById('profile-address').value,
+            allergies: document.getElementById('profile-allergies').value,
+            blood: document.getElementById('profile-blood').value
+        };
+        localStorage.setItem('profile', JSON.stringify(data));
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        if (typeof loadProfile === 'function') {
+            loadProfile();
+            const inputs = document.querySelectorAll('#profile-panel input');
+            inputs.forEach(i => i.addEventListener('input', saveProfile));
+        }
+    });
 
     function toggleDarkMode() { 
         document.body.classList.toggle("dark-mode");

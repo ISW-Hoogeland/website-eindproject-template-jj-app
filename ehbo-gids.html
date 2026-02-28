@@ -409,7 +409,30 @@
         <span class="nav-text" data-i18n="darkmode">Dark mode</span>
     </button>
     <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
+    <button class="btn-top nav-item" onclick="openProfilePanel()"><span>👤</span>Mijn Gegevens</button>
 </nav>
+
+<!-- profielpaneel -->
+<div id="profile-panel" class="profile-panel" aria-hidden="true">
+    <div class="panel-header">
+        <h2>Mijn Gegevens</h2>
+        <button class="close-btn" onclick="closeProfilePanel()" aria-label="Sluiten">✖️</button>
+    </div>
+    <div class="panel-body">
+        <label>Naam
+            <input id="profile-name" type="text">
+        </label>
+        <label>Adres
+            <input id="profile-address" type="text">
+        </label>
+        <label>Allergieën
+            <input id="profile-allergies" type="text">
+        </label>
+        <label>Bloedgroep
+            <input id="profile-blood" type="text">
+        </label>
+    </div>
+</div>
 
 
 <script>
@@ -551,6 +574,105 @@
             }
         }
     }
+
+    // favorieten functionaliteit voor gids
+    function loadFavorites() {
+        const fav = localStorage.getItem('favorites');
+        return fav ? JSON.parse(fav) : [];
+    }
+
+    function saveFavorites(favs) {
+        localStorage.setItem('favorites', JSON.stringify(favs));
+    }
+
+    function isFavorite(id) {
+        return loadFavorites().includes(id);
+    }
+
+    function toggleFavorite(id) {
+        let favs = loadFavorites();
+        if (favs.includes(id)) {
+            favs = favs.filter(x => x !== id);
+        } else {
+            favs.push(id);
+        }
+        saveFavorites(favs);
+        updateFavoriteIcon(id);
+        reorderGuides();
+    }
+
+    function updateFavoriteIcon(id) {
+        const card = document.querySelector(`.guide-card[data-guide="${id}"]`);
+        const icon = card && card.querySelector('.favorite-icon');
+        if (!icon) return;
+        icon.textContent = isFavorite(id) ? '★' : '☆';
+    }
+
+    function reorderGuides() {
+        const grid = document.querySelector('.guide-grid');
+        if (!grid) return;
+        const cards = Array.from(grid.querySelectorAll('.guide-card'));
+        const favs = loadFavorites();
+        cards.sort((a, b) => {
+            const aFav = favs.includes(a.dataset.guide) ? 0 : 1;
+            const bFav = favs.includes(b.dataset.guide) ? 0 : 1;
+            return aFav - bFav;
+        });
+        cards.forEach(c => grid.appendChild(c));
+    }
+
+    function initFavorites() {
+        const cards = document.querySelectorAll('.guide-card');
+        cards.forEach(card => {
+            let id;
+            const onclick = card.getAttribute('onclick');
+            if (onclick) {
+                const match = onclick.match(/toggleDetails\('([^']+)'\)/);
+                if (match) id = match[1];
+            }
+            if (!id) return;
+            card.dataset.guide = id;
+            const header = card.querySelector('.card-header');
+            const fav = document.createElement('span');
+            fav.className = 'favorite-icon';
+            fav.textContent = isFavorite(id) ? '★' : '☆';
+            fav.title = 'Favoriet';
+            fav.style.cursor = 'pointer';
+            fav.addEventListener('click', e => {
+                e.stopPropagation();
+                toggleFavorite(id);
+            });
+            header.appendChild(fav);
+        });
+        reorderGuides();
+    }
+
+    // --- profiel panel scripts ---
+    function openProfilePanel() {
+        document.getElementById('profile-panel').classList.add('open');
+    }
+
+    function closeProfilePanel() {
+        document.getElementById('profile-panel').classList.remove('open');
+    }
+
+    function loadProfile() {
+        const data = JSON.parse(localStorage.getItem('profile') || '{}');
+        document.getElementById('profile-name').value = data.name || '';
+        document.getElementById('profile-address').value = data.address || '';
+        document.getElementById('profile-allergies').value = data.allergies || '';
+        document.getElementById('profile-blood').value = data.blood || '';
+    }
+
+    function saveProfile() {
+        const data = {
+            name: document.getElementById('profile-name').value,
+            address: document.getElementById('profile-address').value,
+            allergies: document.getElementById('profile-allergies').value,
+            blood: document.getElementById('profile-blood').value
+        };
+        localStorage.setItem('profile', JSON.stringify(data));
+    }
     // zoekfunctie filtert de kaarten op basis van zoekterm
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.querySelector('.search-bar');
@@ -568,6 +690,17 @@
                 }
             });
         });
+
+        // initialiseer favorieten na het opbouwen van de kaarten
+        if (typeof initFavorites === 'function') {
+            initFavorites();
+        }
+        // laad eventuele opgeslagen profielgegevens
+        if (typeof loadProfile === 'function') {
+            loadProfile();
+            const inputs = document.querySelectorAll('#profile-panel input');
+            inputs.forEach(i => i.addEventListener('input', saveProfile));
+        }
     });
 </script>
 </body>

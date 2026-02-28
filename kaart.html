@@ -54,7 +54,30 @@
         <span class="nav-text" data-i18n="darkmode">Dark mode</span>
     </button>
     <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
+    <button class="btn-top nav-item" onclick="openProfilePanel()"><span>👤</span>Mijn Gegevens</button>
 </nav>
+
+<!-- profielpaneel -->
+<div id="profile-panel" class="profile-panel" aria-hidden="true">
+    <div class="panel-header">
+        <h2>Mijn Gegevens</h2>
+        <button class="close-btn" onclick="closeProfilePanel()" aria-label="Sluiten">✖️</button>
+    </div>
+    <div class="panel-body">
+        <label>Naam
+            <input id="profile-name" type="text">
+        </label>
+        <label>Adres
+            <input id="profile-address" type="text">
+        </label>
+        <label>Allergieën
+            <input id="profile-allergies" type="text">
+        </label>
+        <label>Bloedgroep
+            <input id="profile-blood" type="text">
+        </label>
+    </div>
+</div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -194,6 +217,41 @@
             const map = translations[currentLang] || translations['nl'];
             alert(map.infoTitle + "\n" + map.infoBody);
         }
+
+        // --- profiel panel scripts ---
+        function openProfilePanel() {
+            document.getElementById('profile-panel').classList.add('open');
+        }
+
+        function closeProfilePanel() {
+            document.getElementById('profile-panel').classList.remove('open');
+        }
+
+        function loadProfile() {
+            const data = JSON.parse(localStorage.getItem('profile') || '{}');
+            document.getElementById('profile-name').value = data.name || '';
+            document.getElementById('profile-address').value = data.address || '';
+            document.getElementById('profile-allergies').value = data.allergies || '';
+            document.getElementById('profile-blood').value = data.blood || '';
+        }
+
+        function saveProfile() {
+            const data = {
+                name: document.getElementById('profile-name').value,
+                address: document.getElementById('profile-address').value,
+                allergies: document.getElementById('profile-allergies').value,
+                blood: document.getElementById('profile-blood').value
+            };
+            localStorage.setItem('profile', JSON.stringify(data));
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            if (typeof loadProfile === 'function') {
+                loadProfile();
+                const inputs = document.querySelectorAll('#profile-panel input');
+                inputs.forEach(i => i.addEventListener('input', saveProfile));
+            }
+        });
 
         // Initialiseer kaart
         const map = L.map('map').setView([52.1326, 5.2913], 8);
