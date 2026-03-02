@@ -48,30 +48,7 @@
         <span class="nav-text">Dark mode</span>
     </button>
     <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
-    <button class="btn-top nav-item" onclick="openProfilePanel()"><span>👤</span>Mijn Gegevens</button>
 </nav>
-
-<!-- profielpaneel -->
-<div id="profile-panel" class="profile-panel" aria-hidden="true">
-    <div class="panel-header">
-        <h2>Mijn Gegevens</h2>
-        <button class="close-btn" onclick="closeProfilePanel()" aria-label="Sluiten">✖️</button>
-    </div>
-    <div class="panel-body">
-        <label>Naam
-            <input id="profile-name" type="text">
-        </label>
-        <label>Adres
-            <input id="profile-address" type="text">
-        </label>
-        <label>Allergieën
-            <input id="profile-allergies" type="text">
-        </label>
-        <label>Bloedgroep
-            <input id="profile-blood" type="text">
-        </label>
-    </div>
-</div>
 
 <script>
     let currentStep = 1;
