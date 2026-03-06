@@ -169,40 +169,6 @@
 
 
 
-    // --- profiel panel scripts ---
-    function openProfilePanel() {
-        document.getElementById('profile-panel').classList.add('open');
-    }
-
-    function closeProfilePanel() {
-        document.getElementById('profile-panel').classList.remove('open');
-    }
-
-    function loadProfile() {
-        const data = JSON.parse(localStorage.getItem('profile') || '{}');
-        document.getElementById('profile-name').value = data.name || '';
-        document.getElementById('profile-address').value = data.address || '';
-        document.getElementById('profile-allergies').value = data.allergies || '';
-        document.getElementById('profile-blood').value = data.blood || '';
-    }
-
-    function saveProfile() {
-        const data = {
-            name: document.getElementById('profile-name').value,
-            address: document.getElementById('profile-address').value,
-            allergies: document.getElementById('profile-allergies').value,
-            blood: document.getElementById('profile-blood').value
-        };
-        localStorage.setItem('profile', JSON.stringify(data));
-    }
-
-    window.addEventListener('DOMContentLoaded', function() {
-        if (typeof loadProfile === 'function') {
-            loadProfile();
-            const inputs = document.querySelectorAll('#profile-panel input');
-            inputs.forEach(i => i.addEventListener('input', saveProfile));
-        }
-    });
 
     function toggleDarkMode() { 
         document.body.classList.toggle("dark-mode");

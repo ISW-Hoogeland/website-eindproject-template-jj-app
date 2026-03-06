@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <audio id="hartslag.mp3" src="images/hartslag.mp3"></audio>
 </head>
 <body>
 
@@ -143,13 +144,17 @@
     
     function breathingResult(isBreathing) {
         if (isBreathing) {
-            // Patient is breathing - skip reanimation, go to recovery position
-            currentStep = 6; // Zet in stabiele zijligging
+            alert('Blijf het slachtoffer in de stabiele zijligging houden en monitor de ademhaling totdat hulpdiensten arriveren.');
+            currentStep = 6; // Ga naar stabiele zijligging
         } else {
-            // Patient is not breathing - go to reanimation
-            currentStep = 5; // Reanimatie geven
+            alert('Begin onmiddellijk met reanimatie (CPR). Volg de instructies op het scherm.');
+            currentStep = 5; // Ga naar reanimatie
+            const audio = document.getElementById("hartslag.mp3");
+        if (audio) {
+            audio.play();
         }
         displayStep();
+        }
     }
     
     function nextStep() {
