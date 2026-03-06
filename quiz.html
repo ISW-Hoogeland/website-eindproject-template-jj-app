@@ -38,16 +38,27 @@
 </main>
 
 <nav class="bottom-nav">
-    <a href="index.html" class="btn-top nav-item"><span>🏠</span>Home</a>
-    <button class="icon-btn" onclick="toggleFlashlight()">
+    <a href="index.html" class="btn-top nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">Home</span>
+    </a>
+
+    <button class="icon-btn nav-item" onclick="toggleFlashlight()">
         <span class="nav-icon">🔦</span>
-        <span class="nav-text">Zaklamp</span>
+        <span class="nav-text" data-i18n="flashlight">Zaklamp</span>
     </button>
-    <button class="icon-btn" onclick="toggleDarkMode()">
+
+    <a href="kaart.html" class="btn-top nav-item">
+        <span class="nav-icon">🗺️</span>
+        <span class="nav-text" data-i18n="aedmap">AED Kaart</span>
+    </a>
+
+    <button class="icon-btn nav-item" onclick="toggleDarkMode()">
         <span class="nav-icon">🌓</span>
-        <span class="nav-text">Dark mode</span>
+        <span class="nav-text" data-i18n="darkmode">Donker</span>
     </button>
-    <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
+
+
 </nav>
 
 
