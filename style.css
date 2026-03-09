@@ -292,3 +292,21 @@ body{
 .step-btn-no{
     background:var(--primary-red);
 }
+#map { 
+            height: calc(100vh - 140px); 
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+        }
+      
+        #location-status, #location-details {
+            position: absolute;
+            left: 10px;
+            background: white;
+            padding: 5px 10px;
+            z-index: 1000;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        #location-status { top: 70px; }
+        #location-details { top: 100px; }
