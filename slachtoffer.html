@@ -5,29 +5,24 @@
     <title>Noodhulp App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <audio id="hartslag.mp3" src="images/hartslag.mp3"></audio>
 </head>
 <body>
 
 <nav class="top-nav">
     <div class="nav-left">
-        <select id="languageSelect" class="btn-lang" onchange="changeLanguage(this.value)">
-            <option value="nl">🇳🇱</option>
-            <option value="en">🇬🇧</option>
-            <option value="de">🇩🇪</option>
-            <option value="fr">🇫🇷</option>
-            <option value="es">🇪🇸</option>
-        </select>
-        <a href="quiz.html" class="btn-top btn-trainen" data-i18n="train">Trainen</a>
+        <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
     </div>
     <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
     <div class="nav-right">
-        <a href="tel:112" class="btn-top btn-112" data-i18n="call112">📞 112</a>
-        <button class="info-btn" onclick="showInfo()" data-i18n="info">ℹ️</button>
+        <a href="tel:112" class="btn-top btn-112">📞 112</a>
+        <button class="info-btn" onclick="alert('Noodhulp App — versie 1.2.14')">ℹ️</button>
     </div>
 </nav>
 
 <main class="main-content victim-page">
-    <h2 data-i18n="pageTitle">Stappenplan: Patiënt in Leven Houden</h2>
+    <h2>Stappenplan: Patiënt in Leven Houden</h2>
     
     <div class="step-container" id="stepContainer">
         <!-- Stappen worden ingevuld door JavaScript -->
@@ -43,55 +38,29 @@
     </div>
 </main>
 
-<div class="action-bar">
-    <button class="icon-btn" onclick="alert('Info over de app')">ⓘ</button>
-    <div class="location-box">
-        <i>📍</i>
-        Uw locatie<br><strong>Professorslaan 20</strong>
-    </div>
-    <button class="icon-btn" onclick="toggleFlashlight()">🔦
-        <span class="icon-label">Zaklamp</span>
-    </button>
-    <button class="icon-btn" onclick="toggleDarkMode()">🌓
-        <span class="icon-label">Dark mode</span>
-    </button>
-</div>
-
 <nav class="bottom-nav">
-    <a href="index.html" class="btn-top nav-item"><span>🏠</span>Home</a>
-    <button class="icon-btn" onclick="toggleFlashlight()">
+    <a href="index.html" class="btn-top nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">Home</span>
+    </a>
+
+    <button class="icon-btn nav-item" onclick="toggleFlashlight()">
         <span class="nav-icon">🔦</span>
         <span class="nav-text" data-i18n="flashlight">Zaklamp</span>
     </button>
-    <button class="icon-btn" onclick="toggleDarkMode()">
-        <span class="nav-icon">🌓</span>
-        <span class="nav-text" data-i18n="darkmode">Dark mode</span>
-    </button>
-    <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
-    <button class="btn-top nav-item" onclick="openProfilePanel()"><span>👤</span>Mijn Gegevens</button>
-</nav>
 
-<!-- profielpaneel -->
-<div id="profile-panel" class="profile-panel" aria-hidden="true">
-    <div class="panel-header">
-        <h2>Mijn Gegevens</h2>
-        <button class="close-btn" onclick="closeProfilePanel()" aria-label="Sluiten">✖️</button>
-    </div>
-    <div class="panel-body">
-        <label>Naam
-            <input id="profile-name" type="text">
-        </label>
-        <label>Adres
-            <input id="profile-address" type="text">
-        </label>
-        <label>Allergieën
-            <input id="profile-allergies" type="text">
-        </label>
-        <label>Bloedgroep
-            <input id="profile-blood" type="text">
-        </label>
-    </div>
-</div>
+    <a href="kaart.html" class="btn-top nav-item">
+        <span class="nav-icon">🗺️</span>
+        <span class="nav-text" data-i18n="aedmap">AED Kaart</span>
+    </a>
+
+    <button class="icon-btn nav-item" onclick="toggleDarkMode()">
+        <span class="nav-icon">🌓</span>
+        <span class="nav-text" data-i18n="darkmode">Donker</span>
+    </button>
+
+
+</nav>
 
 <script>
     let currentStep = 1;
@@ -122,7 +91,7 @@
     
         {
             title: "Reanimatie Geven (CPR)",
-            description: "<strong>30 borstcompressies:</strong> Plaats je handen op het midden van de borst. Duw met volle kracht 5-6cm diep, 100-120 per minuut. <strong>2 beademingen:</strong> Blow 2 keer kort in (als getraind). Herhaal dit ritme totdat de ambulance er is.",
+            description: "<strong>30 borstcompressies:</strong> Plaats je handen op het midden van de borst. Duw met volle kracht 5-6cm diep, 100-120 per minuut. <strong>2 beademingen:</strong> Blaas 2 keer kort in (als getraind). Herhaal dit ritme totdat de ambulance er is.",
             isReanimation: true
         },
         {
@@ -186,13 +155,17 @@
     
     function breathingResult(isBreathing) {
         if (isBreathing) {
-            // Patient is breathing - skip reanimation, go to recovery position
-            currentStep = 6; // Zet in stabiele zijligging
+            alert('Blijf het slachtoffer in de stabiele zijligging houden en monitor de ademhaling totdat hulpdiensten arriveren.');
+            currentStep = 6; // Ga naar stabiele zijligging
         } else {
-            // Patient is not breathing - go to reanimation
-            currentStep = 5; // Reanimatie geven
+            alert('Begin onmiddellijk met reanimatie (CPR). Volg de instructies op het scherm.');
+            currentStep = 5; // Ga naar reanimatie
+            const audio = document.getElementById("hartslag.mp3");
+        if (audio) {
+            audio.play();
         }
         displayStep();
+        }
     }
     
     function nextStep() {
@@ -200,7 +173,10 @@
             currentStep++;
             displayStep();
         } else if (currentStep === totalSteps) {
-            alert('Je hebt alle kritieke stappen voltooid. Zorg dat je bij het slachtoffer blijft!');
+                        alert('Stappen afgerond');
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 750);
         }
     }
     
@@ -211,39 +187,6 @@
         }
     }
     
-    // Taal en vertalingen
-    let currentLang = localStorage.getItem('language') || 'nl';
-    const translations = {
-        nl:{train:'Trainen',call112:'📞 112',home:'Home',flashlight:'Zaklamp',darkmode:'Donker',aedmap:'AED Kaart',infoTitle:'Noodhulp App — versie 1.0',infoBody:'Gebruik deze app voor EHBO snelhulp en navigatie.',pageTitle:'Stappenplan: Patiënt in Leven Houden',victimSteps:[{title:'Controleer je eigen veiligheid',desc:'Zorg dat je zelf veilig bent voordat je hulp biedt. Controleer omliggende gevaren.'},{title:'Spreek het slachtoffer aan',desc:'Probeer reactiviteit vast te stellen. Spreek luid en aanwijzingen. Schouder aanraken.'},{title:'Bel 112 voor hulp',desc:'Bel onmiddellijk 112. Zet op luidspreker. Wacht op instructies van de alarmcentrale.'},{title:'Check de ademhaling',desc:'Kijk, luister en voel of het slachtoffer ademt. Dit mag niet langer dan 10 seconden zijn.'},{title:'Reanimatie Geven (CPR)',desc:'<strong>30 borstcompressies:</strong> Plaats je handen op het midden van de borst. Duw met volle kracht 5-6cm diep, 100-120 per minuut. <strong>2 beademingen:</strong> Blow 2 keer kort in (als getraind). Herhaal dit ritme totdat de ambulance er is.'},{title:'Zet in stabiele zijligging',desc:'Als onbewust maar ademend: draai voorzichtig in de stabiele zijligging om verstikking te voorkomen.'},{title:'Monitor de patiënt',desc:'Blijf ademhaling controleren. Let op veranderingen. Zorg voor warmte en troost.'},{title:'Bloeding stoppen',desc:'Druk stevig op de wond met een schone doek of verband. Houd de druk vast en leg het gewonde lichaamsdeel indien mogelijk omhoog.'},{title:'Wacht op hulpdiensten',desc:'Blijf bij het slachtoffer tot hulpdiensten arriveren. Volg hun instructies op.'}]},
-        en:{train:'Training',call112:'📞 112',home:'Home',flashlight:'Flashlight',darkmode:'Dark mode',aedmap:'AED Map',infoTitle:'Emergency App — v1.0',infoBody:'Use this app voor quick first aid and navigation.',pageTitle:'Steps: Keeping a Patient Alive',victimSteps:[{title:'Check your own safety',desc:'Ensure you are safe before offering help. Check for surrounding hazards.'},{title:'Address the victim',desc:'Try to determine responsiveness. Speak loudly and give directions. Touch shoulder.'},{title:'Call 112 for help',desc:'Call 112 immediately. Put on speaker. Wait for instructions from the control center.'},{title:'Check breathing',desc:'Look, listen and feel if the victim is breathing. This should not take more than 10 seconds.'},{title:'Give CPR',desc:'<strong>30 chest compressions:</strong> Place your hands on the center of the chest. Push with full force 5–6cm deep, 100–120 per minute. <strong>2 breaths:</strong> Blow twice shortly (if trained). Repeat this rhythm until the ambulance arrives.'},{title:'Place in recovery position',desc:'If unconscious but breathing: gently turn into the recovery position to prevent choking.'},{title:'Monitor the patient',desc:'Keep checking breathing. Watch for changes. Provide warmth and comfort.'},{title:'Stop bleeding',desc:'Press firmly on the wound with a clean cloth or bandage. Maintain pressure and elevate the injured limb if possible.'},{title:'Wait for emergency services',desc:'Stay with the victim until help arrives. Follow their instructions.'}]},
-        de:{train:'Training',call112:'📞 112',home:'Start',flashlight:'Taschenlampe',darkmode:'Nachtmodus',aedmap:'AED Karte',infoTitle:'Notfall-App — v1.0',infoBody:'Verwenden Sie diese App für Erste Hilfe und Navigation.'},
-fr:{train:'Entraînement',call112:'📞 112',home:'Accueil',flashlight:'Lampe de poche',darkmode:'Mode sombre',aedmap:'Carte AED',infoTitle:'Application d’urgence — v1.0',infoBody:'Utilisez cette app voor les premiers secours en la navigation.',pageTitle:'Plan d’étapes : garder un patient en vie',victimSteps:[{title:'Vérifiez votre propre sécurité',desc:'Assurez-vous que vous êtes en sécurité avant d’aider. Vérifiez les dangers environnants.'},{title:'Adressez-vous à la victime',desc:'Essayez de déterminer la réactivité. Parlez fort et donnez des instructions. Touchez l’épaule.'},{title:'Appelez le 112',desc:'Appelez le 112 immédiatement. Met en haut-parleur. Attendez les instructions du centre d’appel.'},{title:'Vérifiez la respiration',desc:'Regardez, écoutez et sentez si la victime respire. Cela ne doit pas durer plus de 10 secondes.'},{title:'Faites la réanimation',desc:'<strong>30 compressions thoraciques :</strong> Placez vos mains au centre de la poitrine. Poussez met force 5–6 cm de profondeur, 100–120 par minute. <strong>2 insufflations :</strong> Soufflez twee fois rapidement (si formé). Répétez ce rythme jusqu’à l’arrivée de l’ambulance.'},{title:'Placez en position latérale de sécurité',desc:'Si inconscient maar respirant : tournez doucement en position latérale de sécurité pour éviter l’étouffement.'},{title:'Surveillez le patient',desc:'Continuez à vérifier la respiration. Surveillez les changements. Fournissez chaleur et réconfort.'},{title:'Arrêtez le saignement',desc:'Appuyez fermement sur la plaie met un chiffon propre of bandage. Maintenez la pression en élevez le membre blessé si possible.'},{title:'Attendez les secours',desc:'Restez auprès de la victime jusqu’à l’arrivée des secours. Suivez leurs instructions.'}]},
-        es:{train:'Entrenamiento',call112:'📞 112',home:'Inicio',flashlight:'Linterna',darkmode:'Modo oscuro',aedmap:'Mapa AED',infoTitle:'App de emergencia — v1.0',infoBody:'Usa esta app para primeros auxilios y navegación.'}
-    };
-    function applyTranslations(lang){
-        const map=translations[lang]||translations['nl'];
-        document.documentElement.lang=lang;
-        document.querySelectorAll('[data-i18n]').forEach(el=>{
-            const key=el.getAttribute('data-i18n');
-            if(map[key]) el.textContent=map[key];
-        });
-    }
-    const savedLang = localStorage.getItem('language') || currentLang;
-    currentLang = savedLang;
-    applyTranslations(currentLang);
-    window.addEventListener('load', function(){
-        const langSelect=document.getElementById('languageSelect');
-        if(langSelect) langSelect.value=currentLang;
-    });
-    function changeLanguage(code){
-        localStorage.setItem('language', code);
-        currentLang=code;
-        applyTranslations(code);
-    }
-    function showInfo(){
-        const map=translations[currentLang]||translations['nl'];
-        alert(map.infoTitle+"\n"+map.infoBody);
-    }
     // --- profiel panel scripts ---
     function openProfilePanel() {
         document.getElementById('profile-panel').classList.add('open');
@@ -361,6 +304,13 @@ fr:{train:'Entraînement',call112:'📞 112',home:'Accueil',flashlight:'Lampe de
     
     // Start displaying first step
     displayStep();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+        navigator.serviceWorker.register("service-worker.js");
+    });
+}
 </script>
 </body>
 </html>

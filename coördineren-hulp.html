@@ -5,24 +5,18 @@
     <title>Coördineren Hulp - Noodhulp App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
 <nav class="top-nav">
     <div class="nav-left">
-        <select id="languageSelect" class="btn-lang" onchange="changeLanguage(this.value)">
-            <option value="nl">🇳🇱</option>
-            <option value="en">🇬🇧</option>
-            <option value="de">🇩🇪</option>
-            <option value="fr">🇫🇷</option>
-            <option value="es">🇪🇸</option>
-        </select>
-        <a href="quiz.html" class="btn-top btn-trainen" data-i18n="train">Trainen</a>
+        <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
     </div>
     <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
     <div class="nav-right">
-        <a href="tel:112" class="btn-top btn-112" data-i18n="call112">📞 112</a>
-        <button class="info-btn" onclick="showInfo()" data-i18n="info">ℹ️</button>
+        <a href="tel:112" class="btn-top btn-112">📞 112</a>
+        <button class="info-btn" onclick="alert('Noodhulp App — versie 1.2.14')">ℹ️</button>
     </div>
 </nav>
 
@@ -39,55 +33,31 @@
     </div>
 </main>
 
-<div class="action-bar">
-    <button class="icon-btn" onclick="alert('Info over de app')">ⓘ</button>
-    <div class="location-box">
-        <i>📍</i>
-        Uw locatie<br><strong>Professorslaan 20</strong>
-    </div>
-    <button class="icon-btn" onclick="toggleFlashlight()">🔦
-        <span class="icon-label">Zaklamp</span>
-    </button>
-    <button class="icon-btn" onclick="toggleDarkMode()">🌓
-        <span class="icon-label">Dark mode</span>
-    </button>
-</div>
-
 <nav class="bottom-nav">
-    <a href="index.html" class="btn-top nav-item"><span>🏠</span>Home</a>
-    <button class="icon-btn" onclick="toggleFlashlight()">
+    <a href="index.html" class="btn-top nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">Home</span>
+    </a>
+
+    <button class="icon-btn nav-item" onclick="toggleFlashlight()">
         <span class="nav-icon">🔦</span>
         <span class="nav-text" data-i18n="flashlight">Zaklamp</span>
     </button>
-    <button class="icon-btn" onclick="toggleDarkMode()">
+
+    <a href="kaart.html" class="btn-top nav-item">
+        <span class="nav-icon">🗺️</span>
+        <span class="nav-text" data-i18n="aedmap">AED Kaart</span>
+    </a>
+
+    <button class="icon-btn nav-item" onclick="toggleDarkMode()">
         <span class="nav-icon">🌓</span>
-        <span class="nav-text" data-i18n="darkmode">Dark mode</span>
+        <span class="nav-text" data-i18n="darkmode">Donker</span>
     </button>
-    <a href="kaart.html" class="btn-top nav-item"><span>🗺️</span>AED Kaart</a>
-    <button class="btn-top nav-item" onclick="openProfilePanel()"><span>👤</span>Mijn Gegevens</button>
+
+
 </nav>
 
-<!-- profielpaneel -->
-<div id="profile-panel" class="profile-panel" aria-hidden="true">
-    <div class="panel-header">
-        <h2>Mijn Gegevens</h2>
-        <button class="close-btn" onclick="closeProfilePanel()" aria-label="Sluiten">✖️</button>
-    </div>
-    <div class="panel-body">
-        <label>Naam
-            <input id="profile-name" type="text">
-        </label>
-        <label>Adres
-            <input id="profile-address" type="text">
-        </label>
-        <label>Allergieën
-            <input id="profile-allergies" type="text">
-        </label>
-        <label>Bloedgroep
-            <input id="profile-blood" type="text">
-        </label>
-    </div>
-</div>
+
 
 <script>
     let currentStep = 1;
@@ -156,7 +126,10 @@
             currentStep++;
             displayStep();
         } else if (currentStep === totalSteps) {
-            alert('Je hebt alle stappen voltooid!');
+            alert('Stappen afgerond');
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 750);
         }
     }
     
@@ -167,39 +140,6 @@
         }
     }
     
-    // Taal en vertalingen
-    let currentLang = localStorage.getItem('language') || 'nl';
-    const translations = {
-        nl:{train:'Trainen',call112:'📞 112',home:'Home',flashlight:'Zaklamp',darkmode:'Donker',aedmap:'AED Kaart',infoTitle:'Noodhulp App — versie 1.0',infoBody:'Gebruik deze app voor EHBO snelhulp en navigatie.'},
-        en:{train:'Training',call112:'📞 112',home:'Home',flashlight:'Flashlight',darkmode:'Dark mode',aedmap:'AED Map',infoTitle:'Emergency App — v1.0',infoBody:'Use this app for quick first aid and navigation.'},
-        de:{train:'Training',call112:'📞 112',home:'Start',flashlight:'Taschenlampe',darkmode:'Nachtmodus',aedmap:'AED Karte',infoTitle:'Notfall-App — v1.0',infoBody:'Verwenden Sie deze App für Erste Hilfe und Navigation.'},
-        fr:{train:'Entraînement',call112:'📞 112',home:'Accueil',flashlight:'Lampe de poche',darkmode:'Mode sombre',aedmap:'Carte AED',infoTitle:'Application d’urgence — v1.0',infoBody:'Utilisez cette app pour les premiers secours et la navigation.'},
-        es:{train:'Entrenamiento',call112:'📞 112',home:'Inicio',flashlight:'Linterna',darkmode:'Modo oscuro',aedmap:'Mapa AED',infoTitle:'App de emergencia — v1.0',infoBody:'Usa esta app para primeros auxilios y navegación.'}
-    };
-    function applyTranslations(lang){
-        const map=translations[lang]||translations['nl'];
-        document.documentElement.lang=lang;
-        document.querySelectorAll('[data-i18n]').forEach(el=>{
-            const key=el.getAttribute('data-i18n');
-            if(map[key]) el.textContent=map[key];
-        });
-    }
-    const savedLang = localStorage.getItem('language') || currentLang;
-    currentLang = savedLang;
-    applyTranslations(currentLang);
-    window.addEventListener('load', function(){
-        const langSelect=document.getElementById('languageSelect');
-        if(langSelect) langSelect.value=currentLang;
-    });
-    function changeLanguage(code){
-        localStorage.setItem('language', code);
-        currentLang=code;
-        applyTranslations(code);
-    }
-    function showInfo(){
-        const map=translations[currentLang]||translations['nl'];
-        alert(map.infoTitle+"\n"+map.infoBody);
-    }
     // --- profiel panel scripts ---
     function openProfilePanel() {
         document.getElementById('profile-panel').classList.add('open');
@@ -315,5 +255,13 @@
     // Start displaying first step
     displayStep();
 </script>
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+        navigator.serviceWorker.register("service-worker.js");
+    });
+}
+</script>
+
 </body>
 </html>

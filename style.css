@@ -1,662 +1,294 @@
-/* --- VARIABELEN --- */
-:root {
-    --bg: #ffffff;
-    --text: #000000;
-    --primary-red: #d32f2f;
-    --primary-green: #2e7d32;
-    --primary-blue: #457b9d;
-    --accent-orange: #f39c12;
-    --accent-purple: #9b59b6;
-    --accent-cyan: #00799e;
-    --gray-bg: #f4f4f4;
-    --nav-bg: #ffffff;
-    --border: #dddddd;
-    --border-light: #ddd;
-    --bg-light: #eee;
-    --correct-bg: #d4edda;
-    --correct-text: #155724;
-    --incorrect-bg: #f8d7da;
-    --incorrect-text: #721c24;
-    --shadow-light: rgba(0, 0, 0, 0.1);
-    --shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* --- DARK MODE --- */
-body.dark,
-body.dark-mode {
-    /* slightly lighter to keep outlines visible */
-    --bg: #121212;
-    --text: #e0e0e0;
-    --gray-bg: #2a2a2a;
-    --nav-bg: #1a1a1a;
-    --border: #555555;
-    --border-light: #666;
-    --bg-light: #333333;
-    --correct-bg: #1b4332;
-    --correct-text: #d4edda;
-    --incorrect-bg: #4c1d1f;
-    --incorrect-text: #f8d7da;
-    --shadow-light: rgba(255, 255, 255, 0.1);
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding-top: 140px; /* Ruimte voor top navigatie */
-    padding-bottom: 75px; /* Ruimte voor bottom navigatie */
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* --- HEADER --- */
-header {
-    display: none;
-    justify-content: space-between;
-    padding: 15px;
-    align-items: center;
-}
-
-.btn-top {
-    padding: 8px 20px;
-    border-radius: 4px;
-    border: none;
-    font-weight: bold;
-    text-decoration: none;
-    color: white;
-}
-
-.btn-trainen { background-color: var(--primary-green); }
-.btn-112 { background-color: var(--primary-red); }
-
-/* --- QUIZ LAYOUT --- */
-.main-content {
-    flex-grow: 1;
-    padding: 20px;
-    max-width: 500px;
-    margin: 0 auto;
-    width: 90%;
-}
-
-.progress-bar {
-    font-size: 0.8rem;
-    margin-bottom: 10px;
-    opacity: 0.7;
-    text-align: center;
-}
-
-.question-text {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.options-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.option-btn {
-    padding: 15px;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    background: var(--gray-bg);
-    color: var(--text);
-    cursor: pointer;
-    font-size: 1rem;
-    text-align: left;
-    transition: 0.2s;
-}
-
-.feedback-box {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    display: none;
-    line-height: 1.4;
-}
-
-.feedback-box.correct { background-color: var(--correct-bg); color: var(--correct-text); }
-.feedback-box.incorrect { background-color: var(--incorrect-bg); color: var(--incorrect-text); }
-
-.next-btn {
-    width: 100%;
-    margin-top: 20px;
-    padding: 15px;
-    background: var(--primary-green);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    display: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-/* --- ACTIEBALK & NAV --- */
-.action-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 15px 0;
-    background-color: var(--bg);
-    border-top: 1px solid var(--border);
-    z-index: 99;
-}
-
-.location-box { text-align: center; font-size: 0.8rem; }
-
-.icon-btn {
-    background: none;
-    border: none;
-    color: var(--text);
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-}
-
-.icon-label {
-    font-size: 0.65rem;
-    color: var(--text);
-    line-height: 1;
-}
-
-.top-nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 70px;
-    background-color: var(--nav-bg);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 100;
-    gap: 10px;
-    padding: 0 10px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.app-logo {
-    height: 50px;
-    width: auto;
-    max-width: 50px;
-    object-fit: contain;
-}
-
-.btn-lang {
-    background: var(--bg-light);
-    color: var(--text);
-    /* mirror info-btn dimensions */
-    padding: 6px 8px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    font-weight: bold;
-    font-size: 0.85rem;
-    height: 36px;
-    min-width: 60px;
-    appearance: none; /* remove default select arrow styling for consistency */
-    /* use flexbox inside select to perfectly center the emoji */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    /* ensure the selected flag is centered horizontally */
-    text-align: center;
-    text-align-last: center; /* some browsers need this for centering the selected value */
-    /* vertical adjustment: nudge slightly upward so emoji sits in middle of middle */
-    transform: translateY(-1px);
-    line-height: normal; /* not needed when using flexbox */
-}
-.btn-lang option {
-    text-align: center;
-    /* options inherit same height to keep the flag centered on opened list */
-    line-height: 36px;
-}
-
-.info-btn {
-    background: var(--bg-light);
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 6px 8px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    height: 36px;
-    min-width: 60px;
-}
-
-/* grouping inside the top nav for symmetry */
-.top-nav .nav-left,
-.top-nav .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 16px; /* meer ruimte tussen knoppen */
-}
+/* ============================= */
+/* VARIABELEN */
+/* ============================= */
+:root{
+    --bg:#ffffff;
+    --text:#000;
+    --card-bg:#ffffff;
+    --gray-bg:#f4f4f4;
+    --border:#dddddd;
+
+    --primary-red:#d32f2f;
+    --primary-green:#2e7d32;
+    --primary-blue:#457b9d;
+
+    --shadow:0 4px 12px rgba(0,0,0,0.1);
+
+    --correct-bg:#d4edda;
+    --correct-text:#155724;
+    --incorrect-bg:#f8d7da;
+    --incorrect-text:#721c24;
+}
+
+/* ============================= */
+/* DARK MODE */
+/* ============================= */
+body.dark-mode{
+    --bg:#000;
+    --text:#fff;
+    --card-bg:#2d2d2d;
+    --gray-bg:#1a1a1a;
+    --border:#333;
+
+    --shadow:0 4px 12px rgba(0,0,0,0.5);
+
+    --correct-bg:#1b4332;
+    --correct-text:#d4edda;
+    --incorrect-bg:#4c1d1f;
+    --incorrect-text:#f8d7da;
+}
 
-.bottom-nav .nav-item {
-    font-family: inherit; /* zelfde als bovenste knoppen */
-    font-weight: bold;
-    font-size: 0.85rem; /* match top buttons */
-}
+/* ============================= */
+/* BASIS */
+/* ============================= */
+*{
+    box-sizing:border-box;
+}
 
+body{
+    margin:0;
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
 
-/* bottom nav icon/text layout adjustments */
-.nav-icon {
-    display: block;
-    font-size: 1.2rem;
-}
+    padding-top:80px;
+    padding-bottom:80px;
 
-.nav-text {
-    font-size: 0.7rem;
+    transition:background .3s,color .3s;
 }
-
 
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 70px;
-    background-color: var(--nav-bg);
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 100;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
+/* ============================= */
+/* TOP NAV */
+/* ============================= */
+.top-nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    height:70px;
 
-.nav-item {
-    text-align: center;
-    text-decoration: none;
-    color: var(--text);
-    font-size: 0.7rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
+    background:var(--card-bg);
+    border-bottom:1px solid var(--border);
 
-.nav-item.active { color: var(--primary-red); font-weight: bold; }
-
-.btn-top {
-    padding: 10px 16px;
-    border-radius: 4px;
-    border: none;
-    font-weight: bold;
-    text-decoration: none;
-    color: white;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    transition: transform 0.2s;
-}
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-/* enlarge top buttons slightly when hovered */
-.top-nav .btn-top:hover {
-    transform: scale(1.1);
+    padding:0 30px;
+    z-index:100;
 }
-
-.btn-trainen { background-color: var(--primary-green); }
-.btn-112 { background-color: var(--primary-red); }
 
-.nav-item.active { color: var(--primary-red); font-weight: bold; }
-
-/* Vervangen door hierboven gedefinieerde variabelen */
-
-* { box-sizing: border-box; font-family: Arial, sans-serif; }
-
-body { 
-    margin: 0; 
-    background-color: var(--bg); 
-    color: var(--text);
-    transition: all 0.3s ease;
-    padding-top: 80px; /* Ruimte voor top nav */
+.app-logo{
+    height:45px;
 }
 
-/* Header */
-.top-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    background: var(--card-bg);
-    box-shadow: var(--shadow);
+/* ============================= */
+/* KNOPPEN */
+/* ============================= */
+.btn-top{
+    padding:8px 16px;
+    border-radius:6px;
+    border:none;
+    text-decoration:none;
+    color:#fff;
+    font-size:.8rem;
+    font-weight:600;
 }
 
-.btn-emergency {
-    background-color: var(--primary-red);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: bold;
-    animation: pulse 2s infinite;
-}
+.btn-trainen{background:var(--primary-green);}
+.btn-112{background:var(--primary-red);}
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+.icon-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:var(--text);
 }
 
-/* Main Cards */
-.main-content { padding: 20px; }
-
-.card {
-    display: flex;
-    align-items: center;
-    background: var(--card-bg);
-    padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 15px;
-    text-decoration: none;
-    color: inherit;
-    box-shadow: var(--shadow);
-}
+/* ============================= */
+/* BOTTOM NAV */
+/* ============================= */
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    height:70px;
 
-.card-icon { font-size: 2rem; margin-right: 20px; }
-.card-victim { border-left: 8px solid var(--primary-red); }
-.card-coord { border-left: 8px solid var(--primary-blue); }
-.card-location { 
-    border-left: 8px solid var(--accent-orange);
-    cursor: default;
-}
-.card-quiz { border-left: 8px solid var(--primary-green); }
-.card-guide { border-left: 8px solid var(--accent-purple); }
-.card-map { border-left: 8px solid var(--accent-cyan); }
-
-/* Status Bar */
-.status-bar {
-    background: var(--card-bg);
-    padding: 15px;
-    border-radius: 15px;
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+    background:var(--card-bg);
+    border-top:1px solid var(--border);
 
-.location-info { display: flex; align-items: center; gap: 10px; }
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
 
-.quick-actions {
-    display: flex;
-    justify-content: space-around;
-    border-top: 1px solid var(--border-light);
-    padding-top: 10px;
+    z-index:100;
 }
 
-.action-circle {
-    border: none;
-    background: var(--bg-light);
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: var(--text);
+.bottom-nav a,
+.bottom-nav button{
+    background:none;
+    border:none;
+    font-size: 10px;
+    padding: 12px 16px;
 }
 
-/* Bottom Nav */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: var(--nav-bg);
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    box-shadow: 0 -2px 10px var(--shadow-light);
-    z-index: 100;
-}
+/* NAV ITEM */
+.nav-item{
+    text-decoration:none;
+    color:var(--text);
 
-.nav-item {
-    text-decoration: none;
-    color: var(--text);
-    font-size: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    opacity: 0.7;
-}
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 
-.nav-item.active { color: var(--primary-blue); font-weight: bold; transform: scale(1.1); transition: transform 0.2s; }
-.nav-item span { font-size: 1.5rem; }
-/* Gids Specifieke Styling */
-.header-title { font-size: 1.2rem; margin: 0; }
-.btn-back { text-decoration: none; color: var(--primary-blue); font-weight: bold; }
-
-/* ensure the active navigation item is slightly enlarged */
-.nav-item.active {
-    transform: scale(1.1);
-    transition: transform 0.2s;
-}
+    font-size:.75rem;
+    gap:3px;
 
-.search-container { margin-bottom: 20px; }
-.search-bar {
-    width: 100%;
-    padding: 12px 15px;
-    border-radius: 10px;
-    border: 1px solid var(--border-light);
-    background: var(--bg);
-    color: var(--text);
+    font-weight:500; /* FIX: alle items zelfde gewicht */
 }
 
-.guide-grid { display: flex; flex-direction: column; gap: 10px; }
-
-.guide-card {
-    background: var(--bg);
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    transition: transform 0.2s, border 0.2s;
-    border: 1px solid var(--border-light);
+.nav-icon{
+    font-size:1.3rem;
 }
 
-.guide-card:hover {
-    transform: scale(1.05);
-    border: 2px solid var(--primary-blue);
+.nav-item.active{
+    color:var(--primary-red);
+    font-weight:600;
+    transform:scale(1.05);
 }
 
-/* also target urgent cards on hover explicitly in case the later rule would override */
-.guide-card.urgent:hover {
-    border: 2px solid var(--primary-blue);
+/* ============================= */
+/* MAIN CONTENT */
+/* ============================= */
+.main-content{
+    max-width:500px;
+    margin:auto;
+    padding:20px;
 }
 
-.guide-card.urgent {
-    /* urgent cards no longer have a persistent red border; they rely on hover effect for emphasis */
-    border: 1px solid var(--border-light);
-}
+/* ============================= */
+/* CARDS */
+/* ============================= */
+.card{
+    display:flex;
+    align-items:center;
 
-.card-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+    background:var(--card-bg);
+    padding:18px;
+    margin-bottom:15px;
 
-/* favorieten ster naast titel */
-.favorite-icon {
-    margin-left: auto;
-    font-size: 1.2rem;
-    color: var(--accent-orange);
-    user-select: none;
-}
-.favorite-icon:hover {
-    color: var(--primary-red);
-}
+    border-radius:14px;
+    text-decoration:none;
+    color:inherit;
 
-.card-header h3 { margin: 0; font-size: 1.1rem; }
-.guide-icon { font-size: 1.5rem; }
-
-.guide-details {
-    display: none; /* Standaard verborgen */
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-    line-height: 1.6;
+    box-shadow:var(--shadow);
 }
 
-.guide-details p { margin: 8px 0; font-size: 0.95rem; }
-
-
-
-/* --- profielpanelen --- */
-.profile-panel {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: -100%;
-    background: var(--bg);
-    border-top: 1px solid var(--border);
-    padding: 20px;
-    max-height: 80vh;
-    overflow-y: auto;
-    transition: bottom 0.3s ease;
-    z-index: 200;
+.card-icon{
+    font-size:2rem;
+    margin-right:20px;
 }
-.profile-panel.open {
-    bottom: 0;
-}
-.profile-panel .panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-.profile-panel .panel-body label {
-    display: block;
-    margin-bottom: 10px;
-}
-.profile-panel .panel-body input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    border: 1px solid var(--border-light);
-    border-radius: 4px;
-}
-.profile-panel .close-btn {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-}
 
-/* Coördinatie Pagina */
-.coordinatie-page,
-.victim-page {
-    justify-content: flex-start;
-    padding-top: 20px;
+.card-victim{border-left:8px solid var(--primary-red);}
+.card-coord{border-left:8px solid var(--primary-blue);}
+.card-quiz{border-left:8px solid var(--primary-green);}
+.card-guide{border-left:8px solid #9b59b6;}
+.card-map{border-left:8px solid #00799e;}
+.card-location{
+    border-left:8px solid #f39c12;
 }
 
-/* Stappenpanel Styling */
-.step-container {
-    margin-bottom: 20px;
+/* ============================= */
+/* QUIZ */
+/* ============================= */
+.progress-bar{
+    text-align:center;
+    opacity:.7;
+    margin-bottom:10px;
 }
 
-.step-box {
-    background: var(--gray-bg);
-    padding: 20px;
-    border-radius: 8px;
-    width: 100%;
-    border-left: 5px solid var(--primary-red);
+.question-text{
+    font-weight:600;
+    text-align:center;
+    margin-bottom:20px;
 }
 
-.step-number {
-    color: var(--primary-red);
-    font-weight: bold;
-    margin: 0 0 10px 0;
-    font-size: 0.9rem;
+.options-grid{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
 }
 
-.step-title {
-    margin: 10px 0;
-    font-size: 1.3rem;
+.option-btn{
+    padding:15px;
+    border:2px solid var(--border);
+    border-radius:10px;
+    background:var(--gray-bg);
+    color:var(--text);
+    cursor:pointer;
 }
 
-.step-description {
-    margin: 10px 0;
-    line-height: 1.6;
+/* ============================= */
+/* FEEDBACK */
+/* ============================= */
+.feedback-box{
+    margin-top:20px;
+    padding:15px;
+    border-radius:10px;
+    display:none;
 }
 
-.step-buttons {
-    text-align: center;
-    margin-top: 20px;
+.feedback-box.correct{
+    background:var(--correct-bg);
+    color:var(--correct-text);
 }
 
-.step-buttons #prevBtn {
-    display: none;
+.feedback-box.incorrect{
+    background:var(--incorrect-bg);
+    color:var(--incorrect-text);
 }
 
-.step-btn {
-    padding: 12px 30px;
-    margin: 5px;
-    background-color: var(--primary-green);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1rem;
-    transition: background-color 0.3s;
+/* ============================= */
+/* STAPPEN (EHBO) */
+/* ============================= */
+.step-box{
+    background:var(--gray-bg);
+    padding:20px;
+    border-radius:8px;
+    border-left:5px solid var(--primary-red);
 }
 
-.step-btn:hover {
-    background-color: var(--primary-red);
+.step-number{
+    color:var(--primary-red);
+    font-weight:700;
 }
 
-.step-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.step-title{
+    font-size:1.2rem;
 }
 
-.step-btn-yes {
-    background-color: var(--primary-green);
+.step-description{
+    line-height:1.6;
 }
 
-.step-btn-yes:hover {
-    background-color: darkgreen;
+.step-buttons{
+    text-align:center;
+    margin-top:20px;
 }
 
-.step-btn-no {
-    background-color: var(--primary-red);
-}
+.step-btn{
+    padding:12px 30px;
+    margin:5px;
 
-.step-btn-no:hover {
-    background-color: darkred;
-}
-/* --- Consistente icon grootte bottom nav --- */
-.bottom-nav .nav-icon {
-    font-size: 1.4rem;
-    line-height: 1;
-}
+    background:var(--primary-green);
+    color:#fff;
 
-.bottom-nav .nav-text {
-    font-size: 0.75rem;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
 }
 
-.bottom-nav .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    font-size: 0.75rem;
-}
-/* --- Hover vergroting effect --- */
-
-.bottom-nav .nav-item:hover,
-.card:hover,
-.btn-lang:hover,
-.info-btn:hover {
-    transform: scale(1.08);
-    transition: transform 0.2s ease;
+.step-btn-no{
+    background:var(--primary-red);
 }
