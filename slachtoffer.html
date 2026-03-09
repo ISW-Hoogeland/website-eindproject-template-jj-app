@@ -173,7 +173,10 @@
             currentStep++;
             displayStep();
         } else if (currentStep === totalSteps) {
-            alert('Je hebt alle kritieke stappen voltooid. Zorg dat je bij het slachtoffer blijft!');
+                        alert('Stappen afgerond');
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 750);
         }
     }
     

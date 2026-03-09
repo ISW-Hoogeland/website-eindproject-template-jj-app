@@ -126,7 +126,10 @@
             currentStep++;
             displayStep();
         } else if (currentStep === totalSteps) {
-            alert('Je hebt alle stappen voltooid!');
+            alert('Stappen afgerond');
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 750);
         }
     }
     

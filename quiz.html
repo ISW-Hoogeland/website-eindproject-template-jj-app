@@ -26,14 +26,14 @@
         <div id="question" class="question-text">Laden...</div>
         <div id="options" class="options-grid"></div>
         <div id="feedback" class="feedback-box"></div>
-        <button id="next-button" class="next-btn" onclick="nextQuestion()">Volgende Vraag</button>
+        <button id="next-button" class="next-button" onclick="nextQuestion()">Volgende Vraag</button>
     </div>
 
     <div id="result-screen" style="display: none; text-align: center;">
         <h2>Resultaat</h2>
         <p style="font-size: 2rem; font-weight: bold;"><span id="final-score">0</span> / 20</p>
         <p id="score-message"></p>
-        <button class="option-btn" style="text-align: center; width: 100%;" onclick="location.reload()">Opnieuw starten</button>
+        
     </div>
 </main>
 
@@ -109,6 +109,8 @@
             optionsDiv.appendChild(btn);
         });
     }
+
+    
 
     function selectOption(index) {
         const qData = questions[currentQ];
