@@ -67,6 +67,9 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
+    if (!document.referrer.includes("loading.html")) {
+    window.location.href = "loading.html";
+    }
     // ----- FLASHLIGHT & DARK MODE -----
     let flashlightStream = null;
     let flashlightTrack = null;
