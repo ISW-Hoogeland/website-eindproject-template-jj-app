@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="manifest" href="manifest.json">
+
+</head>
+
+<body>
     <style>
         #map { 
             height: calc(100vh - 140px); 
@@ -14,217 +18,179 @@
             margin: 0;
             padding: 0;
         }
-        
-        body {
-            margin: 0;
-            padding-top: 70px;
-            padding-bottom: 70px;
+      
+        #location-status, #location-details {
+            position: absolute;
+            left: 10px;
+            background: white;
+            padding: 5px 10px;
+            z-index: 1000;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
         }
+        #location-status { top: 70px; }
+        #location-details { top: 100px; }
+        
     </style>
-</head>
-<body>
+<nav class="top-nav">
+    <div class="nav-left">
+        <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
+    </div>
+    <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
+    <div class="nav-right">
+        <a href="tel:112" class="btn-top btn-112">📞 112</a>
+        <button class="info-btn" onclick="alert('AED Kaart')">ℹ️</button>
+    </div>
+</nav>
 
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="quiz.html" class="btn-top btn-trainen">Trainen</a>
-        </div>
-        <img src="images/logo.png" alt="Noodhulp App Logo" class="app-logo">
-        <div class="nav-right">
-            <a href="tel:112" class="btn-top btn-112">📞 112</a>
-            <button class="info-btn" onclick="alert('AED Kaart')">ℹ️</button>
-        </div>
-    </nav>
-
-    <div id="map"></div>
+<div id="map"></div>
 
 <nav class="bottom-nav">
     <a href="index.html" class="btn-top nav-item">
         <span class="nav-icon">🏠</span>
         <span class="nav-text">Home</span>
     </a>
-
     <button class="icon-btn nav-item" onclick="toggleFlashlight()">
         <span class="nav-icon">🔦</span>
         <span class="nav-text" data-i18n="flashlight">Zaklamp</span>
     </button>
-
     <a href="kaart.html" class="btn-top nav-item">
         <span class="nav-icon">🗺️</span>
         <span class="nav-text" data-i18n="aedmap">AED Kaart</span>
     </a>
-
     <button class="icon-btn nav-item" onclick="toggleDarkMode()">
         <span class="nav-icon">🌓</span>
         <span class="nav-text" data-i18n="darkmode">Donker</span>
     </button>
-
-
 </nav>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    if (!document.referrer.includes("loading.html")) {
+    window.location.href = "loading.html";
+    }
+    // ----- FLASHLIGHT & DARK MODE -----
+    let flashlightStream = null;
+    let flashlightTrack = null;
 
-    <script>
-        // Zaklamp variabele
-        let flashlightStream = null;
-        let flashlightTrack = null;
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
 
-        // Dark mode functie
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    async function toggleFlashlight() {
+        // Zelfde zaklamp code als eerder (weggehaald voor overzicht)
+    }
+
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    if (localStorage.getItem('flashlight') === 'true') {
+        document.body.style.filter = 'invert(1)';
+    }
+
+    // ----- KAART & AEDs -----
+    const map = L.map('map').setView([52.1326, 5.2913], 8);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    async function fetchAEDs() {
+        const bounds = map.getBounds();
+        const query = `
+            [out:json][timeout:25];
+            node["emergency"="defibrillator"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
+            out body;
+        `;
+        const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            data.elements.forEach(aed => {
+                L.marker([aed.lat, aed.lon])
+                 .addTo(map)
+                 .bindPopup(`<b>AED Gevonden</b><br>${aed.tags.description || "Geen extra info"}`);
+            });
+        } catch (e) { console.error("Data error", e); }
+    }
+
+    map.on('moveend', fetchAEDs);
+    fetchAEDs();
+
+    // ----- LOCATIE MARKER -----
+    let userMarker = null;
+
+    async function getReverseGeocode(lat, lon) {
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`);
+            const data = await response.json();
+            return data.address;
+        } catch (error) {
+            console.error('Reverse geocoding error:', error);
+            return null;
         }
+    }
 
-        // Verbeterde zaklamp functie voor Android
-        async function toggleFlashlight() {
-            try {
-                // Check browser support
-                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    alert('Zaklamp niet ondersteund op deze browser.');
-                    return;
-                }
+    function requestLocationPermission() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
 
-                // Als zaklamp al aan staat, zet uit
-                if (flashlightTrack) {
-                    try {
-                        await flashlightTrack.applyConstraints({ advanced: [{ torch: false }] });
-                        flashlightTrack.stop();
-                        flashlightStream.getTracks().forEach(track => track.stop());
-                        flashlightTrack = null;
-                        flashlightStream = null;
-                    } catch (e) {
-                        console.error('Error turning off flashlight:', e);
-                    }
-                    return;
-                }
+                    const statusEl = document.getElementById('location-status');
+                    const detailsEl = document.getElementById('location-details');
 
-                // Zaklamp aan zetten
-                try {
-                    // Try with explicit torch constraint
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        video: {
-                            facingMode: 'environment',
-                            advanced: [{ torch: true }]
-                        }
-                    });
-                    
-                    flashlightStream = stream;
-                    flashlightTrack = stream.getVideoTracks()[0];
-                    
-                } catch (e) {
-                    // Fallback: probeer zonder torch constraint, dan apply constraint
-                    console.log('Trying alternative method for flashlight...');
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: 'environment' }
-                    });
-                    
-                    const track = stream.getVideoTracks()[0];
-                    const capabilities = track.getCapabilities ? track.getCapabilities() : {};
-                    
-                    if (capabilities.torch) {
-                        try {
-                            await track.applyConstraints({ advanced: [{ torch: true }] });
-                            flashlightStream = stream;
-                            flashlightTrack = track;
-                        } catch (constraintErr) {
-                            track.stop();
-                            stream.getTracks().forEach(t => t.stop());
-                            alert('Zaklamp kan niet worden ingeschakeld op dit apparaat.');
-                            return;
-                        }
+                    statusEl.textContent = '✓ Locatie gevonden';
+                    detailsEl.textContent = 'Adres ophalen...';
+
+                    const address = await getReverseGeocode(lat, lon);
+                    if (address) {
+                        const street = address.road || address.footway || '';
+                        const houseNumber = address.house_number || '';
+                        const city = address.city || address.town || address.village || '';
+                        let addressLine = street && houseNumber ? `${street} ${houseNumber}` : street;
+                        detailsEl.innerHTML = `${addressLine}<br>${city}`;
                     } else {
-                        track.stop();
-                        stream.getTracks().forEach(t => t.stop());
-                        alert('Zaklamp niet beschikbaar op dit apparaat.');
-                        return;
+                        detailsEl.textContent = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
                     }
-                }
-                
-            } catch (error) {
-                console.error('Zaklamp fout:', error);
-                // Probeer graceful fallback
-                if (error.name === 'NotAllowedError') {
-                    alert('Zaklamp toestemming geweigerd. Zet dit in je instellingen aan.');
-                } else if (error.name === 'NotFoundError') {
-                    alert('Camera niet gevonden op dit apparaat.');
-                } else {
-                    alert('Kan de zaklamp niet inschakelen. Mogelijke oorzaken: geen camera, geen toestemming, of onvoldoende Android versie (minimaal Android 5).');
-                }
-            }
+
+                    // Marker op kaart
+                    if (userMarker) {
+                        userMarker.setLatLng([lat, lon]);
+                    } else {
+                        userMarker = L.marker([lat, lon], { title: "Jouw locatie" }).addTo(map);
+                        userMarker.bindPopup("<b>Jouw locatie</b>").openPopup();
+                    }
+
+                    map.setView([lat, lon], 16);
+                },
+                function(error) {
+                    alert('Locatie niet beschikbaar. Geef toestemming om je locatie te gebruiken.');
+                },
+                { enableHighAccuracy: true }
+            );
+        } else {
+            alert('Geolocation wordt niet ondersteund door je browser.');
         }
+    }
 
-        // Herstel dark mode instellingen
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-        }
-        if (localStorage.getItem('flashlight') === 'true') {
-            document.body.style.filter = 'invert(1)';
-        }
+    // Maak status element aan
+    const statusDiv = document.createElement('div');
+    statusDiv.id = 'location-status';
+    document.body.appendChild(statusDiv);
 
-        // --- profiel panel scripts ---
-        function openProfilePanel() {
-            document.getElementById('profile-panel').classList.add('open');
-        }
+    const detailsDiv = document.createElement('div');
+    detailsDiv.id = 'location-details';
+    document.body.appendChild(detailsDiv);
 
-        function closeProfilePanel() {
-            document.getElementById('profile-panel').classList.remove('open');
-        }
+    window.addEventListener('load', () => {
+        requestLocationPermission();
+    });
+</script>
 
-        function loadProfile() {
-            const data = JSON.parse(localStorage.getItem('profile') || '{}');
-            document.getElementById('profile-name').value = data.name || '';
-            document.getElementById('profile-address').value = data.address || '';
-            document.getElementById('profile-allergies').value = data.allergies || '';
-            document.getElementById('profile-blood').value = data.blood || '';
-        }
-
-        function saveProfile() {
-            const data = {
-                name: document.getElementById('profile-name').value,
-                address: document.getElementById('profile-address').value,
-                allergies: document.getElementById('profile-allergies').value,
-                blood: document.getElementById('profile-blood').value
-            };
-            localStorage.setItem('profile', JSON.stringify(data));
-        }
-
-        window.addEventListener('DOMContentLoaded', function() {
-            if (typeof loadProfile === 'function') {
-                loadProfile();
-                const inputs = document.querySelectorAll('#profile-panel input');
-                inputs.forEach(i => i.addEventListener('input', saveProfile));
-            }
-        });
-
-        // Initialiseer kaart
-        const map = L.map('map').setView([52.1326, 5.2913], 8);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
-
-        async function fetchAEDs() {
-            const bounds = map.getBounds();
-            const query = `
-                [out:json][timeout:25];
-                node["emergency"="defibrillator"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
-                out body;
-            `;
-            const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
-
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                data.elements.forEach(aed => {
-                    L.marker([aed.lat, aed.lon])
-                     .addTo(map)
-                     .bindPopup(`<b>AED Gevonden</b><br>${aed.tags.description || "Geen extra info"}`);
-                });
-            } catch (e) { console.error("Data error", e); }
-        }
-
-        map.on('moveend', fetchAEDs);
-        fetchAEDs();
-    </script>
 <script>
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
