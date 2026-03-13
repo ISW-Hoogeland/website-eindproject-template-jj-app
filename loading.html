@@ -5,6 +5,7 @@
     <title>Laden...</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="loading.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div class="loading-container">
@@ -22,6 +23,9 @@
     </div>
 
     <script>
+        setTimeout(function(){
+        window.location.href = "kaart.html";
+        }, 2000);   
         // Simuleer laadprogress
         let progress = 0;
         const progressFill = document.querySelector('.progress-fill');
@@ -42,5 +46,12 @@
             }
         }, 300);
     </script>
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+        navigator.serviceWorker.register("service-worker.js");
+    });
+}
+</script>
 </body>
 </html>
