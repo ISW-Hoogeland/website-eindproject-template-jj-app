@@ -117,7 +117,7 @@ Tijdens het ontwikkelen zijn ook AI-tools gebruikt zoals ChatGPT om te helpen bi
 
 Om het project lokaal te draaien moeten de volgende stappen worden gevolgd.
 
-### 1. open het github project "website-eindproject-template-jj-app"
+### 1. open het github project "website-eindproject-template-jj-app" of open de bestanden in VSC (zorg dan wel dat path naar images correct is)
 
 ### 2. Installeer "Live Preview"
 
@@ -130,6 +130,8 @@ Open uw browser en typ vervolgens de URL van uw "Live Preview" over.
 
 ### 4. Quick-Button installeren
 druk op delen in uw browser en zet de webpagina op uw beginscherm. Wanneer u hem heeft geïnstalleerd kunt u hem als app gebruiken. 
+
+
 
 ---
 
