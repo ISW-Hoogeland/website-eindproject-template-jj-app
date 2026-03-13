@@ -144,7 +144,7 @@ body{
     font-size:.75rem;
     gap:3px;
 
-    font-weight:500; /* FIX: alle items zelfde gewicht */
+    font-weight:500; 
 }
 
 .nav-icon{
@@ -291,4 +291,55 @@ body{
 
 .step-btn-no{
     background:var(--primary-red);
+}
+
+.search-container { margin-bottom: 20px; }
+.search-bar {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+.guide-grid { display: flex; flex-direction: column; gap: 10px; }
+
+.guide-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.guide-card.urgent {
+    border: 2px solid var(--primary-red);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.card-header h3 { margin: 0; font-size: 1.1rem; }
+.guide-icon { font-size: 1.5rem; }
+
+.guide-details {
+    display: none; /* Standaard verborgen */
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    line-height: 1.6;
+}
+
+.guide-details p { margin: 8px 0; font-size: 0.95rem; }
+
+/* Image placeholder styling */
+.guide-details img {
+    width: 100%;
+    border-radius: 8px;
+    margin: 10px 0;
 }
